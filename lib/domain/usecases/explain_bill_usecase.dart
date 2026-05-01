@@ -69,83 +69,67 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
     return [
       // Energy Charges
       _charge(
-        id: 'energy',
-        name: AppStrings.chargeEnergyName,
-        explain: AppStrings.chargeEnergyExplain,
-        actual: _findCharge(bill, 'energy'),
+        id: 'cost_of_electricity',
+        nameKey: 'label_cost_elec',
+        explainKey: 'explain_cost_elec',
+        actual: _findCharge(bill, 'cost_of_electricity'),
         expected: tariff.energyCharges,
       ),
       // Fixed Charges
       _charge(
-        id: 'fixed',
-        name: AppStrings.chargeFixedName,
-        explain: AppStrings.chargeFixedExplain,
-        actual: _findCharge(bill, 'fixed'),
+        id: 'meter_rent_fix_charges',
+        nameKey: 'label_meter_rent',
+        explainKey: 'explain_meter_rent',
+        actual: _findCharge(bill, 'meter_rent_fix_charges'),
         expected: tariff.fixedCharges,
       ),
       // FC Adjustment
       _charge(
-        id: 'fc',
-        name: AppStrings.chargeFCName,
-        explain: AppStrings.chargeFCExplain,
-        actual: _findCharge(bill, 'fc'),
+        id: 'fuel_price_adjustment',
+        nameKey: 'label_fpa',
+        explainKey: 'explain_fpa',
+        actual: _findCharge(bill, 'fuel_price_adjustment'),
         expected: null, // Variable — can't validate exactly
       ),
       // QTA
       _charge(
-        id: 'qta',
-        name: AppStrings.chargeQTAName,
-        explain: AppStrings.chargeQTAExplain,
-        actual: _findCharge(bill, 'qta'),
+        id: 'qtr_tariff_adj',
+        nameKey: 'label_qta',
+        explainKey: 'explain_qta',
+        actual: _findCharge(bill, 'qtr_tariff_adj'),
         expected: null,
       ),
       // Electricity Duty
       _charge(
         id: 'ed',
-        name: AppStrings.chargeEDName,
-        explain: AppStrings.chargeEDExplain,
+        nameKey: 'label_ed',
+        explainKey: 'explain_ed',
         actual: _findCharge(bill, 'ed'),
         expected: tariff.electricityDuty,
       ),
       // GST
       _charge(
         id: 'gst',
-        name: AppStrings.chargeGSTName,
-        explain: AppStrings.chargeGSTExplain,
+        nameKey: 'label_gst',
+        explainKey: 'explain_gst',
         actual: _findCharge(bill, 'gst'),
         expected: tariff.gst,
       ),
       // TV Fee
       _charge(
         id: 'tv',
-        name: AppStrings.chargeTVName,
-        explain: AppStrings.chargeTVExplain,
+        nameKey: 'label_tv',
+        explainKey: 'explain_tv',
         actual: _findCharge(bill, 'tv'),
         expected: WapdaTariffs.tvFee,
-      ),
-      // NJ Surcharge
-      _charge(
-        id: 'nj',
-        name: AppStrings.chargeNJName,
-        explain: AppStrings.chargeNJExplain,
-        actual: _findCharge(bill, 'nj'),
-        expected: tariff.njSurcharge,
-      ),
-      // TDS
-      _charge(
-        id: 'tds',
-        name: AppStrings.chargeTDSName,
-        explain: AppStrings.chargeTDSExplain,
-        actual: _findCharge(bill, 'tds'),
-        expected: tariff.tds,
       ),
     ].where((c) => c.amount > 0).toList();
   }
 
   BillCharge _charge({
     required String id,
-    required String name,
-    required String explain,
+    required String nameKey,
+    required String explainKey,
     required double actual,
     required double? expected,
   }) {
@@ -165,8 +149,8 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
 
     return BillCharge(
       id: id,
-      nameUrdu: name,
-      explanationUrdu: explain,
+      nameKey: nameKey,
+      explanationKey: explainKey,
       amount: actual,
       expectedAmount: expected,
       status: status,

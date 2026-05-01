@@ -12,16 +12,27 @@ import '../../../core/constants/app_strings.dart';
 ///
 /// Business rules: ZERO logic here — all in [ScanBillUseCase].
 /// BLoC only: orchestrates UI states and calls use-case.
+import '../bill_history/bill_history_bloc_impl.dart';
+import '../bill_history/bill_history_bloc.dart';
+
+/// Manages the bill scan flow:
+/// Permission → Image source → Crop → OCR → Parse → Save → Navigate
+///
+/// Business rules: ZERO logic here — all in [ScanBillUseCase].
+/// BLoC only: orchestrates UI states and calls use-case.
 class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
   final ScanBillUseCase scanBillUseCase;
+  final BillHistoryBlocImpl billHistoryBloc;
   final ImagePicker _imagePicker = ImagePicker();
 
   // Tip rotation timer for the processing screen
   int _tipIndex = 0;
   Timer? _tipTimer;
 
-  BillScanBloc({required this.scanBillUseCase})
-      : super(const BillScanInitial()) {
+  BillScanBloc({
+    required this.scanBillUseCase,
+    required this.billHistoryBloc,
+  }) : super(const BillScanInitial()) {
     on<BillScanCameraRequested>(_onCameraRequested);
     on<BillScanGalleryRequested>(_onGalleryRequested);
     on<BillScanImageSelected>(_onImageSelected);
@@ -102,7 +113,7 @@ class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
 
     emit(BillScanProcessing(
       imagePath: event.croppedPath,
-      currentTipUrdu: AppStrings.processingTips[0],
+      tipKey: 'tip_1',
     ));
 
     final result = await scanBillUseCase(
@@ -116,7 +127,10 @@ class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
         errorMessageUrdu: failure.message,
         canRetry: true,
       )),
-      (bill) => emit(BillScanSuccess(bill: bill)),
+      (bill) {
+        billHistoryBloc.add(const BillHistoryLoadRequested());
+        emit(BillScanSuccess(bill: bill));
+      },
     );
   }
 
@@ -134,14 +148,13 @@ class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
   void _startTipRotation() {
     _tipIndex = 0;
     _tipTimer = Timer.periodic(const Duration(seconds: 3), (_) {
-      _tipIndex = (_tipIndex + 1) % AppStrings.processingTips.length;
-      // Note: emitting from timer is only valid if bloc is not closed
+      _tipIndex = (_tipIndex + 1) % 7; // We have 7 tips (tip_1 to tip_7)
       if (!isClosed && state is BillScanProcessing) {
         final current = state as BillScanProcessing;
         // ignore: invalid_use_of_visible_for_testing_member
         emit(BillScanProcessing(
           imagePath: current.imagePath,
-          currentTipUrdu: AppStrings.processingTips[_tipIndex],
+          tipKey: 'tip_${_tipIndex + 1}',
         ));
       }
     });

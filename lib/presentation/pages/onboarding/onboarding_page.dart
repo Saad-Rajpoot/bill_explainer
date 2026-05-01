@@ -3,7 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
+import 'package:provider/provider.dart';
+import '../../../language/language_provider.dart';
 import '../../../core/router/app_router.dart';
 
 class _Slide {
@@ -24,20 +25,22 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final _ctrl = PageController();
   int _page = 0;
 
-  static const _slides = [
-    _Slide(AppStrings.onboarding1Title, AppStrings.onboarding1Desc,
-        Icons.document_scanner_rounded, AppColors.primary,
-        [Color(0xFFE3F2FD), Color(0xFFBBDEFB)]),
-    _Slide(AppStrings.onboarding2Title, AppStrings.onboarding2Desc,
-        Icons.lightbulb_rounded, Color(0xFFF57F17),
-        [Color(0xFFFFF8E1), Color(0xFFFFECB3)]),
-    _Slide(AppStrings.onboarding3Title, AppStrings.onboarding3Desc,
-        Icons.send_rounded, AppColors.success,
-        [Color(0xFFE8F5E9), Color(0xFFC8E6C9)]),
-  ];
+  List<_Slide> _getSlides(LanguageProvider provider) {
+    return [
+      _Slide(provider.translate('onboarding1Title'), provider.translate('onboarding1Desc'),
+          Icons.document_scanner_rounded, AppColors.primary,
+          const [Color(0xFFE3F2FD), Color(0xFFBBDEFB)]),
+      _Slide(provider.translate('onboarding2Title'), provider.translate('onboarding2Desc'),
+          Icons.lightbulb_rounded, const Color(0xFFF57F17),
+          const [Color(0xFFFFF8E1), Color(0xFFFFECB3)]),
+      _Slide(provider.translate('onboarding3Title'), provider.translate('onboarding3Desc'),
+          Icons.send_rounded, AppColors.success,
+          const [Color(0xFFE8F5E9), Color(0xFFC8E6C9)]),
+    ];
+  }
 
-  void _next() {
-    if (_page < _slides.length - 1) {
+  void _next(int length) {
+    if (_page < length - 1) {
       _ctrl.nextPage(duration: 400.ms, curve: Curves.easeInOutCubic);
     } else {
       _finish();
@@ -55,6 +58,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    final isUrdu = languageProvider.currentLanguageCode == 'ur';
+    final fontFamily = isUrdu ? 'NotoNastaliqUrdu' : 'Roboto';
+    final slides = _getSlides(languageProvider);
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -64,17 +72,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
               alignment: Alignment.topLeft,
               child: TextButton(
                 onPressed: _finish,
-                child: const Text(AppStrings.onboardingSkip,
-                    style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                child: Text(languageProvider.translate('onboardingSkip'),
+                    style: TextStyle(fontFamily: fontFamily,
                         color: AppColors.textSecondary, fontSize: 16)),
               ),
             ),
             Expanded(
               child: PageView.builder(
                 controller: _ctrl,
-                itemCount: _slides.length,
+                itemCount: slides.length,
                 onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (_, i) => _SlideView(slide: _slides[i]),
+                itemBuilder: (_, i) => _SlideView(slide: slides[i], fontFamily: fontFamily),
               ),
             ),
             Padding(
@@ -83,7 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(_slides.length, (i) =>
+                    children: List.generate(slides.length, (i) =>
                       AnimatedContainer(
                         duration: 300.ms,
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -96,12 +104,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _next,
+                    onPressed: () => _next(slides.length),
                     child: Text(
-                      _page == _slides.length - 1
-                          ? AppStrings.onboardingStart
-                          : AppStrings.onboardingNext,
-                      style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                      _page == slides.length - 1
+                          ? languageProvider.translate('onboardingStart')
+                          : languageProvider.translate('onboardingNext'),
+                      style: TextStyle(fontFamily: fontFamily,
                           fontSize: 20, fontWeight: FontWeight.w700)),
                   ),
                 ],
@@ -116,7 +124,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
 class _SlideView extends StatelessWidget {
   final _Slide slide;
-  const _SlideView({required this.slide});
+  final String fontFamily;
+  const _SlideView({required this.slide, required this.fontFamily});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -136,12 +145,12 @@ class _SlideView extends StatelessWidget {
               curve: Curves.elasticOut).fadeIn(),
           const SizedBox(height: 48),
           Text(slide.title, textAlign: TextAlign.center,
-            style: const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 28,
+            style: TextStyle(fontFamily: fontFamily, fontSize: 28,
                 fontWeight: FontWeight.w700, color: AppColors.textPrimary, height: 1.4),
           ).animate(delay: 150.ms).fadeIn().slideY(begin: 0.2, end: 0),
           const SizedBox(height: 20),
           Text(slide.desc, textAlign: TextAlign.center,
-            style: const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 17,
+            style: TextStyle(fontFamily: fontFamily, fontSize: 17,
                 color: AppColors.textSecondary, height: 1.6),
           ).animate(delay: 250.ms).fadeIn().slideY(begin: 0.2, end: 0),
         ],

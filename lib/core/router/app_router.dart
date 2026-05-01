@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../presentation/pages/splash/splash_page.dart';
+import '../../presentation/pages/language/language_selection_page.dart';
 import '../../presentation/pages/onboarding/onboarding_page.dart';
 import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/scan/scan_bill_page.dart';
@@ -12,6 +13,7 @@ import '../../presentation/pages/settings/settings_page.dart';
 /// All app route names — never use raw strings in navigation calls.
 abstract class AppRoutes {
   static const String splash = '/';
+  static const String languageSelection = '/language';
   static const String onboarding = '/onboarding';
   static const String home = '/home';
   static const String scan = '/scan';
@@ -36,6 +38,17 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.splash,
       name: 'splash',
       builder: (context, state) => const SplashPage(),
+    ),
+
+    // ─── Language Selection ──────────────────────────────────────────
+    GoRoute(
+      path: AppRoutes.languageSelection,
+      name: 'languageSelection',
+      builder: (context, state) => const LanguageSelectionPage(),
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const LanguageSelectionPage(),
+        transitionsBuilder: _fadeTransition,
+      ),
     ),
 
     // ─── Onboarding ─────────────────────────────────────────────────

@@ -8,22 +8,19 @@ import '../../core/errors/exceptions.dart';
 import '../../core/network/network_info.dart';
 import '../../core/utils/tariff_calculator.dart';
 import '../datasources/local/bill_local_datasource.dart';
-import '../datasources/remote/supabase_datasource.dart';
 import '../models/bill_model.dart';
 import '../../features/bill_scan/data/parsers/bill_parser.dart';
 import '../../features/bill_scan/data/services/hybrid_bill_extractor.dart';
 
 /// Concrete implementation of [BillRepository].
-/// Follows offline-first: Isar is source of truth; Supabase is optional sync.
+/// Follows offline-first: Isar is source of truth.
 class BillRepositoryImpl implements BillRepository {
   final BillLocalDatasource localDatasource;
-  final SupabaseDatasource remoteDatasource;
   final NetworkInfo networkInfo;
   final HybridBillExtractor hybridExtractor;
 
   BillRepositoryImpl({
     required this.localDatasource,
-    required this.remoteDatasource,
     required this.networkInfo,
     required this.hybridExtractor,
   });
@@ -247,9 +244,6 @@ class BillRepositoryImpl implements BillRepository {
 
 
 
-      // 7. Attempt background cloud sync (fire-and-forget)
-      _syncToCloudIfConnected(model);
-
       return Right(savedBill);
     } on OcrException catch (e) {
       return Left(OcrFailure(message: e.message));
@@ -314,29 +308,7 @@ class BillRepositoryImpl implements BillRepository {
 
   @override
   Future<Either<Failure, void>> syncBillsToCloud() async {
-    final isConnected = await networkInfo.isConnected;
-    if (!isConnected) return const Right(null); // Silently skip offline
-
-    try {
-      final unsynced = await localDatasource.getUnsyncedBills();
-      for (final model in unsynced) {
-        final payload = {
-          'consumer_number': model.consumerNumber,
-          'disco_name': model.discoName,
-          'bill_month': model.billMonth.toIso8601String(),
-          'units_consumed': model.unitsConsumed,
-          'total_amount': model.totalAmount,
-          'is_overcharged': model.isOvercharged,
-        };
-        final supabaseId = await remoteDatasource.syncBill(payload);
-        await localDatasource.markAsSynced(model.id, supabaseId);
-      }
-      return const Right(null);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(message: e.message));
-    } catch (e) {
-      return const Left(UnexpectedFailure());
-    }
+    return const Right(null);
   }
 
   @override
@@ -378,38 +350,38 @@ class BillRepositoryImpl implements BillRepository {
     return [
       if (parsed.costOfElectricity != null)
         _makeCharge('cost_of_electricity', parsed.costOfElectricity!,
-            'بجلی کی قیمت', 'آپ کے استعمال کردہ یونٹس کی اصل قیمت۔', tariff.energyCharges),
+            'label_cost_elec', 'explain_cost_elec', tariff.energyCharges),
       if (parsed.meterRentFixCharges != null)
         _makeCharge('meter_rent_fix_charges', parsed.meterRentFixCharges!,
-            'میٹر رینٹ/فکس چارجز', 'میٹر کا بنیادی ماہانہ کرایہ۔', tariff.fixedCharges),
+            'label_meter_rent', 'explain_meter_rent', tariff.fixedCharges),
       if (parsed.fuelPriceAdjustment != null)
         _makeCharge('fuel_price_adjustment', parsed.fuelPriceAdjustment!,
-            'فیول ایڈجسٹمنٹ (FPA)', 'ایندھن کی قیمت میں تبدیلی کی وجہ سے شامل رقم۔', tariff.fcAdjustment),
+            'label_fpa', 'explain_fpa', tariff.fcAdjustment),
       if (parsed.qtrTariffAdj != null)
         _makeCharge('qtr_tariff_adj', parsed.qtrTariffAdj!,
-            'سہ ماہی ایڈجسٹمنٹ (QTA)', 'بجلی کی پیداواری لاگت کو بیلنس کرنے کے لیے چارجز۔', tariff.qtaCharge),
+            'label_qta', 'explain_qta', tariff.qtaCharge),
       if (parsed.electricityDuty != null)
         _makeCharge(
           'ed',
           parsed.electricityDuty!,
-          'الیکٹرسٹی ڈیوٹی',
-          'حکومت کی طرف سے بجلی کے استعمال پر ٹیکس۔',
+          'label_ed',
+          'explain_ed',
           tariff.electricityDuty,
         ),
       if (parsed.gst != null)
         _makeCharge(
           'gst',
           parsed.gst!,
-          'جی ایس ٹی (GST)',
-          'وفاقی حکومت کا سیلز ٹیکس (18%)۔',
+          'label_gst',
+          'explain_gst',
           tariff.gst,
         ),
       if (parsed.tvFee != null)
         _makeCharge(
           'tv',
           parsed.tvFee!,
-          'ٹی وی فیس',
-          'پی ٹی وی کا ماہانہ لائسنس چارج۔',
+          'label_tv',
+          'explain_tv',
           tariff.tvFee,
         ),
 
@@ -417,46 +389,46 @@ class BillRepositoryImpl implements BillRepository {
         _makeCharge(
           'arrears',
           parsed.arrears!,
-          'بقایا جات (Arrears)',
-          'پچھلے مہینوں کی غیر ادا شدہ رقم۔',
+          'label_arrears',
+          'explain_arrears',
           parsed.arrears!,
         ),
       if (parsed.lpSurcharge != null && parsed.lpSurcharge! > 0)
         _makeCharge(
           'lp',
           parsed.lpSurcharge!,
-          'لیٹ پیمنٹ سرچارج',
-          'تاریخ گزرنے کے بعد ادائیگی پر جرمانہ۔',
+          'label_lp_surcharge',
+          'explain_lp',
           parsed.lpSurcharge!,
         ),
       if (parsed.gstOnFpa != null && parsed.gstOnFpa! > 0)
         _makeCharge(
           'gst_fpa',
           parsed.gstOnFpa!,
-          'ایف پی اے پر جی ایس ٹی',
-          'فیول ایڈجسٹمنٹ کی رقم پر لگنے والا سیلز ٹیکس۔',
+          'label_gst_fpa',
+          'explain_gst_fpa',
           parsed.gstOnFpa!,
         ),
       if (parsed.edOnFpa != null && parsed.edOnFpa! > 0)
         _makeCharge(
           'ed_fpa',
           parsed.edOnFpa!,
-          'ایف پی اے پر ای ڈی',
-          'فیول ایڈجسٹمنٹ کی رقم پر لگنے والی الیکٹرسٹی ڈیوٹی۔',
+          'label_ed_fpa',
+          'explain_ed_fpa',
           parsed.edOnFpa!,
         ),
     ];
   }
 
-  BillCharge _makeCharge(String id, double amount, String name, String explanation, double expected) {
+  BillCharge _makeCharge(String id, double amount, String nameKey, String explanationKey, double expected) {
     final status = (amount - expected).abs() > (expected * 0.05)
         ? (amount > expected ? ChargeStatus.overcharged : ChargeStatus.normal)
         : ChargeStatus.normal;
 
     return BillCharge(
       id: id,
-      nameUrdu: name,
-      explanationUrdu: explanation,
+      nameKey: nameKey,
+      explanationKey: explanationKey,
       amount: amount,
       expectedAmount: expected,
       status: status,
@@ -508,25 +480,5 @@ class BillRepositoryImpl implements BillRepository {
     return 'دونوں بلوں میں یونٹ برابر ہیں۔';
   }
 
-  void _syncToCloudIfConnected(BillModel model) {
-    // Fire-and-forget — never blocks the scan flow
-    Future.microtask(() async {
-      final isConnected = await networkInfo.isConnected;
-      if (!isConnected || !remoteDatasource.isAuthenticated) return;
-      try {
-        final payload = {
-          'consumer_number': model.consumerNumber,
-          'disco_name': model.discoName,
-          'bill_month': model.billMonth.toIso8601String(),
-          'units_consumed': model.unitsConsumed,
-          'total_amount': model.totalAmount,
-          'is_overcharged': model.isOvercharged,
-        };
-        final id = await remoteDatasource.syncBill(payload);
-        await localDatasource.markAsSynced(model.id, id);
-      } catch (_) {
-        // Best-effort — will retry on next syncBillsToCloud call
-      }
-    });
-  }
+
 }

@@ -21,22 +21,33 @@ class UrduFormatter {
 
   // ─── Units ────────────────────────────────────────────────────────
 
-  /// "۳۵۰ یونٹ"
-  static String units(int units) => '${_toUrduDigits(units.toString())} یونٹ';
+  /// "۳۵۰ یونٹ" or "350 Units"
+  static String units(int units, {String locale = 'ur'}) {
+    if (locale == 'en') {
+      return '$units Units';
+    }
+    return '${_toUrduDigits(units.toString())} یونٹ';
+  }
 
   static String unitsPlain(int units) => units.toString();
 
   // ─── Date & Month ─────────────────────────────────────────────────
 
-  /// "اکتوبر ۲۰۲۴"
-  static String billMonth(DateTime date) {
+  /// "اکتوبر ۲۰۲۴" or "October 2024"
+  static String billMonth(DateTime date, {String locale = 'ur'}) {
+    if (locale == 'en') {
+      return DateFormat('MMMM yyyy').format(date);
+    }
     final month = _urduMonths[date.month - 1];
     final year = _toUrduDigits(date.year.toString());
     return '$month $year';
   }
 
-  /// "۲۵ اکتوبر ۲۰۲۴"
-  static String fullDate(DateTime date) {
+  /// "۲۵ اکتوبر ۲۰۲۴" or "25 October 2024"
+  static String fullDate(DateTime date, {String locale = 'ur'}) {
+    if (locale == 'en') {
+      return DateFormat('dd MMMM yyyy').format(date);
+    }
     final day = _toUrduDigits(date.day.toString());
     final month = _urduMonths[date.month - 1];
     final year = _toUrduDigits(date.year.toString());
@@ -44,10 +55,17 @@ class UrduFormatter {
   }
 
   /// Formats due date with days remaining indicator
-  static String dueDateWithRemaining(DateTime dueDate) {
+  static String dueDateWithRemaining(DateTime dueDate, {String locale = 'ur'}) {
     final now = DateTime.now();
     final diff = dueDate.difference(now).inDays;
-    final dateStr = fullDate(dueDate);
+    final dateStr = fullDate(dueDate, locale: locale);
+
+    if (locale == 'en') {
+      if (diff < 0) return '$dateStr (Expired)';
+      if (diff == 0) return '$dateStr (Last Day)';
+      return '$dateStr ($diff days left)';
+    }
+
     if (diff < 0) return '$dateStr (میعاد ختم)';
     if (diff == 0) return '$dateStr (آج آخری دن)';
     return '$dateStr (${_toUrduDigits(diff.toString())} دن باقی)';

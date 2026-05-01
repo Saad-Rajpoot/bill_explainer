@@ -3,11 +3,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
+import '../../../language/language_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../core/router/app_router.dart';
 import '../../../injection_container.dart';
 import '../../blocs/bill_history/bill_history_bloc.dart';
 import '../../blocs/bill_history/bill_history_bloc_impl.dart';
+import '../../widgets/language_bottom_sheet.dart';
 
 import '../../../core/utils/urdu_formatter.dart';
 import '../../../domain/entities/bill.dart';
@@ -32,6 +34,7 @@ class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: CustomScrollView(
@@ -46,14 +49,14 @@ class _HomeView extends StatelessWidget {
                 decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
                 padding: const EdgeInsets.fromLTRB(24, 60, 24, 20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(AppStrings.homeGreeting,
-                        style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                    Text(languageProvider.translate('homeGreeting'),
+                        style: TextStyle(fontFamily: languageProvider.currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                             fontSize: 16, color: Colors.white70)),
-                    const Text('بجلی سمجھو',
-                        style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                    Text(languageProvider.translate('app_title'),
+                        style: TextStyle(
                             fontSize: 28, fontWeight: FontWeight.w700,
                             color: Colors.white)),
                   ],
@@ -63,7 +66,13 @@ class _HomeView extends StatelessWidget {
             actions: [
               IconButton(
                 icon: const Icon(Icons.settings_rounded, color: Colors.white),
-                onPressed: () => context.go('${AppRoutes.home}/settings'),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const LanguageBottomSheet(),
+                  );
+                },
               )
             ],
           ),
@@ -122,18 +131,18 @@ class _ScanButton extends StatelessWidget {
                 blurRadius: 24, offset: const Offset(0, 8)),
           ],
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.document_scanner_rounded, size: 56, color: Colors.white),
-            SizedBox(height: 12),
-            Text(AppStrings.homeScanButton,
-                style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+            const Icon(Icons.document_scanner_rounded, size: 56, color: Colors.white),
+            const SizedBox(height: 12),
+            Text(Provider.of<LanguageProvider>(context).translate('homeScanButton'),
+                style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                     fontSize: 24, fontWeight: FontWeight.w700,
                     color: Colors.white)),
-            SizedBox(height: 4),
-            Text(AppStrings.scanTip,
-                style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+            const SizedBox(height: 4),
+            Text(Provider.of<LanguageProvider>(context).translate('scanTip'),
+                style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                     fontSize: 13, color: Colors.white70)),
           ],
         ),
@@ -163,7 +172,7 @@ class _LastBillCard extends StatelessWidget {
           boxShadow: AppColors.cardShadow,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,16 +186,16 @@ class _LastBillCard extends StatelessWidget {
                   ),
                   child: Text(
                     bill.isOvercharged
-                        ? AppStrings.statusOvercharged : AppStrings.statusNormal,
+                        ? Provider.of<LanguageProvider>(context).translate('statusOvercharged') : Provider.of<LanguageProvider>(context).translate('statusNormal'),
                     style: TextStyle(
-                        fontFamily: 'NotoNastaliqUrdu', fontSize: 13,
+                        fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto', fontSize: 13,
                         color: bill.isOvercharged
                             ? AppColors.error : AppColors.success,
                         fontWeight: FontWeight.w700),
                   ),
                 ),
-                Text(AppStrings.homeLastBill,
-                    style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                Text(Provider.of<LanguageProvider>(context).translate('homeLastBill'),
+                    style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                         fontSize: 14, color: AppColors.textSecondary)),
               ],
             ),
@@ -196,7 +205,7 @@ class _LastBillCard extends StatelessWidget {
                     fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
             const SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(width: 16),
                 Text(bill.discoName,
@@ -212,8 +221,8 @@ class _LastBillCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'آخری تاریخ: ${UrduFormatter.dueDateWithRemaining(bill.dueDate)}',
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 13,
+              '${Provider.of<LanguageProvider>(context).translate('due_date_prefix')}${UrduFormatter.dueDateWithRemaining(bill.dueDate)}',
+              style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto', fontSize: 13,
                   color: bill.isPastDue ? AppColors.error : AppColors.textHint),
             ),
           ],
@@ -235,11 +244,11 @@ class _EmptyBillCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Icon(Icons.receipt_long_rounded, size: 48, color: AppColors.textHint),
+          const Icon(Icons.receipt_long_rounded, size: 48, color: AppColors.textHint),
           const SizedBox(height: 12),
-          const Text(AppStrings.homeNoBill,
+          Text(Provider.of<LanguageProvider>(context).translate('homeNoBill'),
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+              style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 16, color: AppColors.textHint)),
         ],
       ),
@@ -255,13 +264,13 @@ class _QuickActionsRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: _ActionCard(
-          icon: Icons.history_rounded, label: AppStrings.homeViewHistory,
+          icon: Icons.history_rounded, label: Provider.of<LanguageProvider>(context).translate('homeViewHistory'),
           color: AppColors.primary,
           onTap: () => context.go('${AppRoutes.home}/history'),
         )),
         const SizedBox(width: 12),
         Expanded(child: _ActionCard(
-          icon: Icons.compare_arrows_rounded, label: AppStrings.homeCompare,
+          icon: Icons.compare_arrows_rounded, label: Provider.of<LanguageProvider>(context).translate('homeCompare'),
           color: AppColors.secondary,
           onTap: () => context.go('${AppRoutes.home}/compare'),
         )),
@@ -294,7 +303,7 @@ class _ActionCard extends StatelessWidget {
             Icon(icon, color: color, size: 28),
             const SizedBox(height: 8),
             Text(label, textAlign: TextAlign.center,
-                style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                     fontSize: 14, color: color, fontWeight: FontWeight.w600)),
           ],
         ),

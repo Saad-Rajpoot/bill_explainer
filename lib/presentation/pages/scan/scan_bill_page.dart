@@ -3,8 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:provider/provider.dart';
+import '../../../language/language_provider.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../injection_container.dart';
 import '../../blocs/bill_scan/bill_scan_bloc.dart';
@@ -40,7 +41,7 @@ class _ScanView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
-          title: const Text(AppStrings.scanTitle),
+          title: Text(Provider.of<LanguageProvider>(context).translate('app_title')),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () => context.go(AppRoutes.home),
@@ -63,12 +64,12 @@ class _ScanView extends StatelessWidget {
       sourcePath: imagePath,
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: AppStrings.scanCrop,
+          toolbarTitle: Provider.of<LanguageProvider>(context, listen: false).translate('scan_crop'),
           toolbarColor: AppColors.primary,
           toolbarWidgetColor: Colors.white,
           activeControlsWidgetColor: AppColors.secondary,
         ),
-        IOSUiSettings(title: AppStrings.scanCrop),
+        IOSUiSettings(title: Provider.of<LanguageProvider>(context, listen: false).translate('scan_crop')),
       ],
     );
     if (context.mounted) {
@@ -104,22 +105,22 @@ class _IdleView extends StatelessWidget {
           ).animate().scale(begin: const Offset(0.8, 0.8), duration: 500.ms,
               curve: Curves.easeOutBack),
           const SizedBox(height: 32),
-          const Text('بل کی تصویر لیں',
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+          Text(Provider.of<LanguageProvider>(context).translate('scan_title'), // Used as general instruction
+              style: const TextStyle(
                   fontSize: 26, fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary))
               .animate(delay: 100.ms).fadeIn(),
           const SizedBox(height: 8),
-          const Text(AppStrings.scanTip,
+          Text(Provider.of<LanguageProvider>(context).translate('scanTip'), 
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+              style: const TextStyle(
                   fontSize: 15, color: AppColors.textSecondary))
               .animate(delay: 150.ms).fadeIn(),
           const Spacer(),
           // Camera button
           _SourceButton(
             icon: Icons.camera_alt_rounded,
-            label: AppStrings.scanCamera,
+            label: Provider.of<LanguageProvider>(context).translate('btn_camera'),
             gradient: AppColors.primaryGradient,
             onTap: () => context.read<BillScanBloc>()
                 .add(const BillScanCameraRequested()),
@@ -128,7 +129,7 @@ class _IdleView extends StatelessWidget {
           // Gallery button
           _SourceButton(
             icon: Icons.photo_library_rounded,
-            label: AppStrings.scanGallery,
+            label: Provider.of<LanguageProvider>(context).translate('btn_gallery'),
             gradient: LinearGradient(colors: [
               AppColors.textSecondary.withOpacity(0.2),
               AppColors.textSecondary.withOpacity(0.1),
@@ -172,7 +173,7 @@ class _SourceButton extends StatelessWidget {
           children: [
             Icon(icon, color: textColor, size: 26),
             const SizedBox(width: 12),
-            Text(label, style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+            Text(label, style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w700, color: textColor)),
           ],
         ),
@@ -198,24 +199,26 @@ class _ProcessingView extends StatelessWidget {
             const CircularProgressIndicator(
                 strokeWidth: 3, color: AppColors.primary),
             const SizedBox(height: 32),
-            const Text(AppStrings.loadingAnalyzing,
-                style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+            Text(Provider.of<LanguageProvider>(context).translate('loading_message'),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                     fontSize: 22, fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary)),
             const SizedBox(height: 24),
             AnimatedSwitcher(
               duration: 400.ms,
               child: Container(
-                key: ValueKey(state.currentTipUrdu),
+                key: ValueKey(state.tipKey),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
-                  state.currentTipUrdu,
+                  Provider.of<LanguageProvider>(context).translate(state.tipKey),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                  style: TextStyle(
+                      fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                       fontSize: 15, color: AppColors.primary),
                 ),
               ),
@@ -243,15 +246,15 @@ class _ErrorView extends StatelessWidget {
           const Icon(Icons.error_outline_rounded,
               size: 64, color: AppColors.error),
           const SizedBox(height: 24),
-          Text(state.errorMessageUrdu, textAlign: TextAlign.center,
-              style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+          Text(Provider.of<LanguageProvider>(context).translate('error_message'), textAlign: TextAlign.center,
+              style: const TextStyle(
                   fontSize: 18, color: AppColors.textPrimary)),
           const SizedBox(height: 32),
           if (state.canRetry)
             ElevatedButton(
               onPressed: () =>
                   context.read<BillScanBloc>().add(const BillScanRetried()),
-              child: const Text(AppStrings.actionRetry),
+              child: Text(Provider.of<LanguageProvider>(context).translate('retry_button')),
             ),
         ],
       ),
@@ -275,14 +278,14 @@ class _PermissionView extends StatelessWidget {
           const Icon(Icons.no_photography_rounded,
               size: 64, color: AppColors.warning),
           const SizedBox(height: 24),
-          Text(state.messageUrdu, textAlign: TextAlign.center,
-              style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+          Text(Provider.of<LanguageProvider>(context).translate('permission_denied'), textAlign: TextAlign.center,
+              style: const TextStyle(
                   fontSize: 18, color: AppColors.textPrimary)),
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: () =>
                 context.read<BillScanBloc>().add(const BillScanRetried()),
-            child: const Text(AppStrings.actionRetry),
+            child: Text(Provider.of<LanguageProvider>(context).translate('retry_button')),
           ),
         ],
       ),

@@ -313,8 +313,8 @@ class BillModel {
   BillCharge _charge(String chargeId, double amount) {
     return BillCharge(
       id: chargeId,
-      nameUrdu: '',
-      explanationUrdu: '',
+      nameKey: 'label_$chargeId',
+      explanationKey: 'explain_$chargeId',
       amount: amount,
       status: ChargeStatus.normal,
     );

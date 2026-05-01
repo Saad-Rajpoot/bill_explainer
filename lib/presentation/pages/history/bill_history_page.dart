@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../../language/language_provider.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/urdu_formatter.dart';
 import '../../../domain/entities/bill.dart';
@@ -33,7 +34,7 @@ class _HistoryView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text(AppStrings.historyTitle),
+        title: Text(Provider.of<LanguageProvider>(context).translate('historyTitle')),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.go(AppRoutes.home),
@@ -53,7 +54,7 @@ class _HistoryView extends StatelessWidget {
           }
           if (state is BillHistoryFailure) {
             return Center(child: Text(state.messageUrdu,
-                style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                     fontSize: 18)));
           }
           return const SizedBox.shrink();
@@ -79,13 +80,13 @@ class _LoadedView extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(child: _StatCard(
-                  label: AppStrings.historyUnits,
-                  value: UrduFormatter.units(state.totalUnits),
+                  label: Provider.of<LanguageProvider>(context).translate('historyUnits'),
+                  value: UrduFormatter.units(state.totalUnits, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
                   icon: Icons.bolt, color: AppColors.secondary,
                 )),
                 const SizedBox(width: 12),
                 Expanded(child: _StatCard(
-                  label: AppStrings.historyAmount,
+                  label: Provider.of<LanguageProvider>(context).translate('historyAmount'),
                   value: UrduFormatter.pkr(state.totalAmount),
                   icon: Icons.payments_rounded, color: AppColors.primary,
                 )),
@@ -104,13 +105,13 @@ class _LoadedView extends StatelessWidget {
           ),
 
         // ─── List ─────────────────────────────────────────────────
-        const SliverToBoxAdapter(
+        SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 8),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
             child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(AppStrings.historyTitle,
-                  style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+              alignment: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? Alignment.centerRight : Alignment.centerLeft,
+              child: Text(Provider.of<LanguageProvider>(context).translate('historyTitle'),
+                  style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                       fontSize: 18, fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary)),
             ),
@@ -148,10 +149,10 @@ class _BillChart extends StatelessWidget {
         border: Border.all(color: AppColors.divider),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('یونٹ کا رجحان',
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
+          Text(Provider.of<LanguageProvider>(context).translate('chartTitle'),
+              style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 16, fontWeight: FontWeight.w700,
                   color: AppColors.textPrimary)),
           const SizedBox(height: 20),
@@ -244,15 +245,15 @@ class _BillTile extends StatelessWidget {
             // Details
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(UrduFormatter.billMonth(bill.billMonth),
-                      style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                  Text(UrduFormatter.billMonth(bill.billMonth, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+                      style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                           fontSize: 15, fontWeight: FontWeight.w600,
                           color: AppColors.textPrimary)),
                   const SizedBox(height: 4),
-                  Text('${bill.discoName} • ${UrduFormatter.units(bill.unitsConsumed)}',
-                      style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                  Text('${bill.discoName} • ${UrduFormatter.units(bill.unitsConsumed, locale: Provider.of<LanguageProvider>(context).currentLanguageCode)}',
+                      style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                           fontSize: 13, color: AppColors.textSecondary)),
                 ],
               ),
@@ -293,11 +294,11 @@ class _StatCard extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(value, style: TextStyle(fontFamily: 'Roboto',
                     fontSize: 16, fontWeight: FontWeight.w700, color: color)),
-                Text(label, style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
+                Text(label, style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                     fontSize: 12, color: AppColors.textSecondary)),
               ],
             ),
@@ -312,20 +313,40 @@ class _EmptyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.receipt_long_rounded, size: 64, color: AppColors.textHint),
-          const SizedBox(height: 24),
-          const Text(AppStrings.historyEmpty,
-              style: TextStyle(fontFamily: 'NotoNastaliqUrdu',
-                  fontSize: 18, color: AppColors.textHint)),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () => context.go('${AppRoutes.home}/scan'),
-            child: const Text(AppStrings.homeScanButton),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceVariant,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.receipt_long_rounded, size: 64, color: AppColors.textHint),
+            ),
+            const SizedBox(height: 24),
+            Text(Provider.of<LanguageProvider>(context).translate('historyEmpty'),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
+                    fontSize: 18, color: AppColors.textHint, height: 1.5)),
+            const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: () => context.go('${AppRoutes.home}/scan'),
+              icon: const Icon(Icons.add_a_photo_rounded),
+              label: Text(Provider.of<LanguageProvider>(context).translate('homeScanButton')),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                textStyle: TextStyle(
+                  fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/constants/app_colors.dart';
 import 'core/router/app_router.dart';
 import 'data/datasources/local/bill_local_datasource.dart';
 import 'injection_container.dart';
-
-/// Supabase project URL and anon key.
-/// TODO: Move to .env / --dart-define before production.
-const String _supabaseUrl = 'https://wwmhkwstgwigzomqdppf.supabase.co';
-const String _supabaseAnonKey =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3bWhrd3N0Z3dpZ3pvbXFkcHBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0ODkyOTcsImV4cCI6MjA5MzA2NTI5N30.KuPivzGlmE9xwYj0cQzuJNEi7ymlylVT8jB6MpAzsYo';
+import 'language/language_provider.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   // ─── System UI ────────────────────────────────────────────────────
   SystemChrome.setSystemUIOverlayStyle(
@@ -34,13 +34,6 @@ Future<void> main() async {
   // ─── Hive ─────────────────────────────────────────────────────────
   await Hive.initFlutter();
 
-  // ─── Supabase ─────────────────────────────────────────────────────
-  await Supabase.initialize(
-    url: _supabaseUrl,
-    anonKey: _supabaseAnonKey,
-    debug: false,
-  );
-
   // ─── Isar ─────────────────────────────────────────────────────────
   final isar = await IsarService.open();
 
@@ -53,7 +46,12 @@ Future<void> main() async {
     return true;
   }());
 
-  runApp(const BijliSamjhoApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => LanguageProvider()..loadSavedLanguage(),
+      child: const BijliSamjhoApp(),
+    ),
+  );
 }
 
 class BijliSamjhoApp extends StatelessWidget {
@@ -61,20 +59,27 @@ class BijliSamjhoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+
+    // If still initializing, can show a simple loader or just default to ur.
+    // However, it initializes very fast. We'll default to ur before init.
+    final isUrdu = languageProvider.currentLanguageCode == 'ur';
+    final currentFontFamily = isUrdu ? 'NotoNastaliqUrdu' : 'Roboto';
+
     return MaterialApp.router(
-      title: 'بجلی سمجھو',
+      title: languageProvider.translate('app_title'),
       debugShowCheckedModeBanner: false,
 
       // ─── Routing ──────────────────────────────────────────────────
       routerConfig: appRouter,
 
       // ─── Theme ────────────────────────────────────────────────────
-      theme: _buildLightTheme(),
-      darkTheme: _buildDarkTheme(),
+      theme: _buildLightTheme(currentFontFamily),
+      darkTheme: _buildDarkTheme(currentFontFamily),
       themeMode: ThemeMode.system,
 
       // ─── Locale ───────────────────────────────────────────────────
-      locale: const Locale('ur', 'PK'),
+      locale: Locale(languageProvider.currentLanguageCode, isUrdu ? 'PK' : 'US'),
       supportedLocales: const [
         Locale('ur', 'PK'),
         Locale('en', 'US'),
@@ -95,13 +100,16 @@ class BijliSamjhoApp extends StatelessWidget {
                   maxScaleFactor: 1.3,
                 ),
           ),
-          child: child!,
+          child: Directionality(
+            textDirection: isUrdu ? TextDirection.rtl : TextDirection.ltr,
+            child: child!,
+          ),
         );
       },
     );
   }
 
-  ThemeData _buildLightTheme() {
+  ThemeData _buildLightTheme(String fontFamily) {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
@@ -113,16 +121,16 @@ class BijliSamjhoApp extends StatelessWidget {
         surface: AppColors.surface,
       ),
       scaffoldBackgroundColor: AppColors.background,
-      fontFamily: 'NotoNastaliqUrdu',
+      fontFamily: fontFamily,
 
       // AppBar
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
-          fontFamily: 'NotoNastaliqUrdu',
+          fontFamily: fontFamily,
           fontSize: 20,
           fontWeight: FontWeight.w700,
           color: AppColors.textPrimary,
@@ -138,8 +146,8 @@ class BijliSamjhoApp extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          textStyle: const TextStyle(
-            fontFamily: 'NotoNastaliqUrdu',
+          textStyle: TextStyle(
+            fontFamily: fontFamily,
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
@@ -170,8 +178,8 @@ class BijliSamjhoApp extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
-        labelStyle: const TextStyle(
-          fontFamily: 'NotoNastaliqUrdu',
+        labelStyle: TextStyle(
+          fontFamily: fontFamily,
           color: AppColors.textSecondary,
         ),
       ),
@@ -186,8 +194,8 @@ class BijliSamjhoApp extends StatelessWidget {
       // SnackBar
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.textPrimary,
-        contentTextStyle: const TextStyle(
-          fontFamily: 'NotoNastaliqUrdu',
+        contentTextStyle: TextStyle(
+          fontFamily: fontFamily,
           color: AppColors.textOnPrimary,
           fontSize: 14,
         ),
@@ -197,7 +205,7 @@ class BijliSamjhoApp extends StatelessWidget {
     );
   }
 
-  ThemeData _buildDarkTheme() {
+  ThemeData _buildDarkTheme(String fontFamily) {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
@@ -210,14 +218,14 @@ class BijliSamjhoApp extends StatelessWidget {
         surface: AppColors.darkSurface,
       ),
       scaffoldBackgroundColor: AppColors.darkBackground,
-      fontFamily: 'NotoNastaliqUrdu',
-      appBarTheme: const AppBarTheme(
+      fontFamily: fontFamily,
+      appBarTheme: AppBarTheme(
         backgroundColor: AppColors.darkSurface,
         foregroundColor: AppColors.darkTextPrimary,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
-          fontFamily: 'NotoNastaliqUrdu',
+          fontFamily: fontFamily,
           fontSize: 20,
           fontWeight: FontWeight.w700,
           color: AppColors.darkTextPrimary,

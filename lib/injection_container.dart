@@ -1,11 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:isar/isar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/network/network_info.dart';
 import 'data/datasources/local/bill_local_datasource.dart';
-import 'data/datasources/remote/supabase_datasource.dart';
 import 'data/repositories/bill_repository_impl.dart';
 import 'domain/repositories/bill_repository.dart';
 import 'domain/usecases/compare_bills_usecase.dart';
@@ -16,6 +14,7 @@ import 'presentation/blocs/bill_explain/bill_explain_bloc.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'presentation/blocs/bill_history/bill_history_bloc_impl.dart';
 import 'presentation/blocs/bill_scan/bill_scan_bloc.dart';
 import 'features/bill_scan/data/services/gemini_bill_service.dart';
@@ -29,7 +28,6 @@ final GetIt sl = GetIt.instance;
 Future<void> initDependencies(Isar isar) async {
   // ─── External ─────────────────────────────────────────────────────
   sl.registerLazySingleton<Connectivity>(() => Connectivity());
-  sl.registerLazySingleton<SupabaseClient>(() => Supabase.instance.client);
   sl.registerLazySingleton<Dio>(() => Dio());
   sl.registerLazySingleton<FlutterSecureStorage>(
       () => const FlutterSecureStorage());
@@ -44,15 +42,10 @@ Future<void> initDependencies(Isar isar) async {
     () => BillLocalDatasource(isar),
   );
 
-  sl.registerLazySingleton<SupabaseDatasource>(
-    () => SupabaseDatasource(sl<SupabaseClient>()),
-  );
-
   sl.registerLazySingleton<GeminiBillService>(
     () => GeminiBillService(
       dio: sl<Dio>(),
-      apiKey:
-          'AIzaSyAKxlvqZQEeP6DmMz3Brj5IvuokYV3Yidc', // Get it from https://aistudio.google.com/
+      apiKey: dotenv.get('GEMINI_API_KEY', fallback: ''),
     ),
   );
 
@@ -64,7 +57,6 @@ Future<void> initDependencies(Isar isar) async {
   sl.registerLazySingleton<BillRepository>(
     () => BillRepositoryImpl(
       localDatasource: sl(),
-      remoteDatasource: sl(),
       networkInfo: sl(),
       hybridExtractor: sl(),
     ),
@@ -78,12 +70,15 @@ Future<void> initDependencies(Isar isar) async {
 
   // ─── BLoCs (factory — new instance per screen) ────────────────────
   sl.registerFactory(
-    () => BillScanBloc(scanBillUseCase: sl<ScanBillUseCase>()),
+    () => BillScanBloc(
+      scanBillUseCase: sl<ScanBillUseCase>(),
+      billHistoryBloc: sl<BillHistoryBlocImpl>(),
+    ),
   );
   sl.registerFactory(
     () => BillExplainBloc(explainBillUseCase: sl<ExplainBillUseCase>()),
   );
-  sl.registerFactory(
+  sl.registerLazySingleton<BillHistoryBlocImpl>(
     () => BillHistoryBlocImpl(
       getBillHistoryUseCase: sl<GetBillHistoryUseCase>(),
       billRepository: sl<BillRepository>(),

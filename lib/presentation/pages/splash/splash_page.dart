@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../language/language_provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 
@@ -26,8 +28,12 @@ class _SplashPageState extends State<SplashPage> {
     if (!mounted) return;
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
+    final languageSelected = prefs.getBool('language_selected') ?? false;
     final onboardingDone = prefs.getBool('onboarding_done') ?? false;
-    if (onboardingDone) {
+    
+    if (!languageSelected) {
+      context.go(AppRoutes.languageSelection);
+    } else if (onboardingDone) {
       context.go(AppRoutes.home);
     } else {
       context.go(AppRoutes.onboarding);
@@ -43,39 +49,32 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ─── Lightning bolt icon ─────────────────────────────
+              // ─── Lightning bolt icon              // Logo placeholder
               Container(
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 120,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.3),
-                    width: 1.5,
-                  ),
+                      color: Colors.white.withOpacity(0.3), width: 2),
                 ),
-                child: const Icon(
-                  Icons.bolt,
-                  size: 60,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.bolt_rounded,
+                    size: 80, color: Colors.white),
               )
                   .animate()
                   .scale(
-                    begin: const Offset(0.5, 0.5),
-                    duration: 600.ms,
-                    curve: Curves.elasticOut,
-                  )
+                      duration: 800.ms,
+                      curve: Curves.elasticOut,
+                      begin: const Offset(0.5, 0.5))
                   .fadeIn(duration: 400.ms),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 32),
 
-              // ─── App name ─────────────────────────────────────────
-              const Text(
-                'بجلی سمجھو',
+              Text(
+                Provider.of<LanguageProvider>(context).translate('app_title'),
                 style: TextStyle(
-                  fontFamily: 'NotoNastaliqUrdu',
+                  fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 38,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -89,9 +88,9 @@ class _SplashPageState extends State<SplashPage> {
               const SizedBox(height: 12),
 
               Text(
-                'اپنا بجلی بل آسانی سے سمجھیں',
+                Provider.of<LanguageProvider>(context).translate('app_tagline'),
                 style: TextStyle(
-                  fontFamily: 'NotoNastaliqUrdu',
+                  fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 16,
                   color: Colors.white.withOpacity(0.85),
                 ),

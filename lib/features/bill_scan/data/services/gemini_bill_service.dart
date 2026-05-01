@@ -166,14 +166,28 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
 
   double? _amt(dynamic v) {
     if (v == null) return null;
-    final s = v.toString().replaceAll(RegExp(r'[^0-9.]'), '');
-    return s.isEmpty ? null : double.tryParse(s);
+    final s = v.toString();
+    // Use regex to find all numbers (including decimals)
+    final numbers = RegExp(r'\d+\.?\d*').allMatches(s)
+        .map((m) => double.tryParse(m.group(0) ?? '0') ?? 0.0)
+        .toList();
+    
+    if (numbers.isEmpty) return null;
+    // Sum all found numbers
+    return numbers.reduce((a, b) => a + b);
   }
 
   int? _int(dynamic v) {
     if (v == null) return null;
-    final s = v.toString().replaceAll(RegExp(r'[^0-9]'), '');
-    return s.isEmpty ? null : int.tryParse(s);
+    final s = v.toString();
+    // Use regex to find all whole numbers
+    final numbers = RegExp(r'\d+').allMatches(s)
+        .map((m) => int.tryParse(m.group(0) ?? '0') ?? 0)
+        .toList();
+    
+    if (numbers.isEmpty) return null;
+    // Sum all found numbers
+    return numbers.reduce((a, b) => a + b);
   }
 
   String? _str(dynamic v) {

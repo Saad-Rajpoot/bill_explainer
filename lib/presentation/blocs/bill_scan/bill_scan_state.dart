@@ -26,17 +26,17 @@ class BillScanAwaitingCrop extends BillScanState {
   List<Object?> get props => [imagePath];
 }
 
-/// OCR in progress — show loading with Urdu tips
+/// OCR in progress — show loading with localized tips
 class BillScanProcessing extends BillScanState {
   final String imagePath;
-  final String currentTipUrdu;
+  final String tipKey;
   const BillScanProcessing({
     required this.imagePath,
-    required this.currentTipUrdu,
+    required this.tipKey,
   });
 
   @override
-  List<Object?> get props => [imagePath, currentTipUrdu];
+  List<Object?> get props => [imagePath, tipKey];
 }
 
 /// Scan complete — bill parsed and saved
