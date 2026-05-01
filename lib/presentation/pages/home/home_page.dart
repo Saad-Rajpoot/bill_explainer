@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -159,16 +160,19 @@ class _LastBillCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lp = Provider.of<LanguageProvider>(context);
+    final isUrdu = lp.currentLanguageCode == 'ur';
+
     return GestureDetector(
       onTap: () => context.go('${AppRoutes.home}/explanation/${bill.id}'),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(
               color: bill.isOvercharged ? AppColors.error.withOpacity(0.3)
-                  : AppColors.divider),
+                  : AppColors.divider.withOpacity(0.5)),
           boxShadow: AppColors.cardShadow,
         ),
         child: Column(
@@ -178,52 +182,82 @@ class _LastBillCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
                     color: bill.isOvercharged
                         ? AppColors.errorBackground : AppColors.successBackground,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    bill.isOvercharged
-                        ? Provider.of<LanguageProvider>(context).translate('statusOvercharged') : Provider.of<LanguageProvider>(context).translate('statusNormal'),
-                    style: TextStyle(
-                        fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto', fontSize: 13,
-                        color: bill.isOvercharged
-                            ? AppColors.error : AppColors.success,
-                        fontWeight: FontWeight.w700),
+                    lp.translate(bill.isOvercharged ? 'statusOvercharged' : 'statusNormal'),
+                    style: isUrdu
+                        ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.error)
+                        : GoogleFonts.outfit(
+                            fontSize: 12,
+                            color: bill.isOvercharged ? AppColors.error : AppColors.success,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5),
                   ),
                 ),
-                Text(Provider.of<LanguageProvider>(context).translate('homeLastBill'),
-                    style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
-                        fontSize: 14, color: AppColors.textSecondary)),
+                Text(lp.translate('homeLastBill'),
+                    style: isUrdu
+                        ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)
+                        : GoogleFonts.outfit(
+                            fontSize: 14, 
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textSecondary)),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Text(UrduFormatter.pkr(bill.totalAmount, locale: lp.currentLanguageCode),
+                style: isUrdu
+                    ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 32, fontWeight: FontWeight.w900, color: AppColors.textPrimary)
+                    : GoogleFonts.outfit(
+                        fontSize: 36,
+                        height: 1,
+                        fontWeight: FontWeight.w900, 
+                        color: AppColors.textPrimary)),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Icon(Icons.flash_on_rounded, size: 16, color: AppColors.primary),
+                const SizedBox(width: 8),
+                Text(lp.translate('settingsCompany'),
+                    style: isUrdu
+                        ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textSecondary)
+                        : GoogleFonts.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textSecondary)),
+                const SizedBox(width: 12),
+                Container(width: 4, height: 4, decoration: const BoxDecoration(color: AppColors.textHint, shape: BoxShape.circle)),
+                const SizedBox(width: 12),
+                Text(UrduFormatter.units(bill.unitsConsumed, locale: lp.currentLanguageCode),
+                    style: isUrdu
+                        ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)
+                        : GoogleFonts.outfit(
+                            fontSize: 14, 
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textSecondary)),
               ],
             ),
             const SizedBox(height: 16),
-            Text(UrduFormatter.pkr(bill.totalAmount),
-                style: const TextStyle(fontFamily: 'Roboto', fontSize: 32,
-                    fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
-            const SizedBox(height: 8),
+            const Divider(height: 1),
+            const SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(width: 16),
-                Text(bill.discoName,
-                    style: const TextStyle(fontFamily: 'Roboto', fontSize: 14,
-                        color: AppColors.textSecondary)),
+                Icon(Icons.calendar_today_rounded, size: 14, color: bill.isPastDue ? AppColors.error : AppColors.textHint),
                 const SizedBox(width: 8),
-                Text('•', style: TextStyle(color: AppColors.textHint)),
-                const SizedBox(width: 8),
-                Text(UrduFormatter.units(bill.unitsConsumed),
-                    style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
-                        fontSize: 15, color: AppColors.textSecondary)),
+                Text(
+                  '${lp.translate('due_date_prefix')}: ${UrduFormatter.dueDateWithRemaining(bill.dueDate, locale: lp.currentLanguageCode)}',
+                  style: isUrdu
+                      ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textSecondary)
+                      : GoogleFonts.outfit(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: bill.isPastDue ? AppColors.error : AppColors.textSecondary),
+                ),
               ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${Provider.of<LanguageProvider>(context).translate('due_date_prefix')}${UrduFormatter.dueDateWithRemaining(bill.dueDate)}',
-              style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto', fontSize: 13,
-                  color: bill.isPastDue ? AppColors.error : AppColors.textHint),
             ),
           ],
         ),

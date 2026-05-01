@@ -26,7 +26,7 @@ class GeminiBillService {
       final prompt = [
         Content.multi([
           TextPart("""
-You are an expert data extraction assistant. I am providing you with an image of an IESCO (Islamabad Electric Supply Company) electricity bill. Your task is to extract ALL fields and values from EVERY visible box/section of the bill image accurately.
+You are an expert data extraction assistant. I am providing you with an image of an electricity bill from Pakistan. Your task is to extract ALL fields and values from EVERY visible box/section of the bill image accurately.
 
 IMPORTANT RULES:
 - Keep EXACT field names as they appear on the bill (do not rename, merge, or simplify any field)
@@ -61,7 +61,7 @@ Extract the data in the following JSON structure:
     "NO OF ACT": "",
     "UN-BILL-AGE": "",
     "FEEDER NAME": "",
-    "IESCO GST NO": ""
+    "COMPANY GST NO": ""
   },
   "box_3_name_and_address": {
     "NAME": "",
@@ -82,7 +82,7 @@ Extract the data in the following JSON structure:
     "UNITS": "",
     "STATUS": ""
   },
-  "box_6_iesco_charges": {
+  "box_6_company_charges": {
     "UNITS CONSUMED": "",
     "COST OF ELECTRICITY": "",
     "METER RENT FIX CHARGES": "",
@@ -147,15 +147,7 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
             .replaceAll('```json', '')
             .replaceAll('```', '')
             .trim();
-        print('--- GEMINI JSON RESPONSE (CHUNKED) ---');
-        const int chunkSize = 1000;
-        for (int i = 0; i < cleanJson.length; i += chunkSize) {
-          final end = (i + chunkSize < cleanJson.length) ? i + chunkSize : cleanJson.length;
-          print(cleanJson.substring(i, end));
-        }
-        print('---------------------------------------');
-        final Map<String, dynamic> data = jsonDecode(cleanJson);
-        return _mapJsonToParsedBill(data);
+
       }
       return null;
     } catch (e) {
@@ -202,7 +194,7 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
     final b3 = json['box_3_name_and_address'] as Map<String, dynamic>? ?? {};
     final b4 = json['box_4_payment_history'] as List? ?? [];
     final b5 = json['box_5_meter_reading'] as Map<String, dynamic>? ?? {};
-    final b6 = json['box_6_iesco_charges'] as Map<String, dynamic>? ?? {};
+    final b6 = json['box_6_company_charges'] as Map<String, dynamic>? ?? {};
     final b7 = json['box_7_govt_charges'] as Map<String, dynamic>? ?? {};
     final b8 = json['box_8_total_charges'] as Map<String, dynamic>? ?? {};
     final b9 = json['box_9_bill_calculation'] as Map<String, dynamic>? ?? {};
@@ -216,7 +208,7 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
     )).toList();
 
     return ParsedBill(
-      discoName: 'IESCO',
+      companyName: _str(b1['COMPANY NAME']) ?? _str(b1['DISCO']) ?? 'Company',
       paymentHistory: history,
       // BOX 1
       connectionDate:  _str(b1['CONNECTION DATE']),
@@ -238,7 +230,7 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
       noOfAct:         _str(b2['NO OF ACT']),
       unBillAge:       _str(b2['UN-BILL-AGE']),
       feederName:      _str(b2['FEEDER NAME']),
-      iescoGstNo:      _str(b2['IESCO GST NO']),
+      companyGstNo:    _str(b2['COMPANY GST NO']) ?? _str(b2['IESCO GST NO']),
       // BOX 3
       name:            _str(b3['NAME']),
       sonOf:           _str(b3['S/O']),

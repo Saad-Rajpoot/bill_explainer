@@ -3,7 +3,7 @@ import '../constants/wapda_tariffs.dart';
 /// Result of a tariff calculation.
 class TariffResult {
   final int units;
-  final String discoName;
+  final String companyName;
   final double energyCharges;
   final double fixedCharges;
   final double fcAdjustment;
@@ -20,7 +20,7 @@ class TariffResult {
 
   const TariffResult({
     required this.units,
-    required this.discoName,
+    required this.companyName,
     required this.energyCharges,
     required this.fixedCharges,
     required this.fcAdjustment,
@@ -39,21 +39,21 @@ class TariffResult {
 
 /// Core tariff calculation engine.
 ///
-/// Implements NEPRA's slab-based billing system for all 8 DISCOs.
-/// Key invariant: calculations must match the DISCO's printed bill within ±2%.
+/// Implements NEPRA's slab-based billing system for all 8 Pakistani electricity companies.
+/// Key invariant: calculations must match the printed bill within ±2%.
 class TariffCalculator {
   TariffCalculator._();
 
-  /// Calculates the expected bill for given units and DISCO.
+  /// Calculates the expected bill for given units and company.
   ///
   /// [units] — kWh consumed this month
-  /// [discoName] — one of [WapdaTariffs.allDiscos]
+  /// [companyName] — one of [WapdaTariffs.allCompanies]
   /// [fcAdjustmentPerUnit] — Fuel Cost Adjustment for this billing period (PKR/unit)
   /// [qtaPerUnit] — Quarterly Tariff Adjustment (can be negative = credit)
   /// [isFiler] — Tax filer status for TDS calculation
   static TariffResult calculate({
     required int units,
-    required String discoName,
+    required String companyName,
     double fcAdjustmentPerUnit = 0.0,
     double qtaPerUnit = 0.0,
     bool isFiler = true,
@@ -107,7 +107,7 @@ class TariffCalculator {
 
     return TariffResult(
       units: units,
-      discoName: discoName,
+      companyName: companyName,
       energyCharges: energyCharges,
       fixedCharges: fixedCharges,
       fcAdjustment: fcAdjustment,
@@ -130,14 +130,14 @@ class TariffCalculator {
   static OverchargeResult validateBill({
     required int units,
     required double billedAmount,
-    required String discoName,
+    required String companyName,
     double fcAdjustmentPerUnit = 0.0,
     double qtaPerUnit = 0.0,
     bool isFiler = true,
   }) {
     final result = calculate(
       units: units,
-      discoName: discoName,
+      companyName: companyName,
       fcAdjustmentPerUnit: fcAdjustmentPerUnit,
       qtaPerUnit: qtaPerUnit,
       isFiler: isFiler,

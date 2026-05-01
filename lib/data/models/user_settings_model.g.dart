@@ -17,15 +17,15 @@ const UserSettingsModelSchema = CollectionSchema(
   name: r'UserSettingsModel',
   id: 1840420974923084997,
   properties: {
-    r'darkMode': PropertySchema(
+    r'companyName': PropertySchema(
       id: 0,
+      name: r'companyName',
+      type: IsarType.string,
+    ),
+    r'darkMode': PropertySchema(
+      id: 1,
       name: r'darkMode',
       type: IsarType.bool,
-    ),
-    r'discoName': PropertySchema(
-      id: 1,
-      name: r'discoName',
-      type: IsarType.string,
     ),
     r'isPremium': PropertySchema(
       id: 2,
@@ -53,7 +53,7 @@ int _userSettingsModelEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.discoName.length * 3;
+  bytesCount += 3 + object.companyName.length * 3;
   return bytesCount;
 }
 
@@ -63,8 +63,8 @@ void _userSettingsModelSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.darkMode);
-  writer.writeString(offsets[1], object.discoName);
+  writer.writeString(offsets[0], object.companyName);
+  writer.writeBool(offsets[1], object.darkMode);
   writer.writeBool(offsets[2], object.isPremium);
 }
 
@@ -75,8 +75,8 @@ UserSettingsModel _userSettingsModelDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = UserSettingsModel();
-  object.darkMode = reader.readBool(offsets[0]);
-  object.discoName = reader.readString(offsets[1]);
+  object.companyName = reader.readString(offsets[0]);
+  object.darkMode = reader.readBool(offsets[1]);
   object.id = id;
   object.isPremium = reader.readBool(offsets[2]);
   return object;
@@ -90,9 +90,9 @@ P _userSettingsModelDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBool(offset)) as P;
-    case 1:
       return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readBool(offset)) as P;
     case 2:
       return (reader.readBool(offset)) as P;
     default:
@@ -197,23 +197,13 @@ extension UserSettingsModelQueryWhere
 extension UserSettingsModelQueryFilter
     on QueryBuilder<UserSettingsModel, UserSettingsModel, QFilterCondition> {
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      darkModeEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'darkMode',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameEqualTo(
+      companyNameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -221,7 +211,7 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameGreaterThan(
+      companyNameGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -229,7 +219,7 @@ extension UserSettingsModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -237,7 +227,7 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameLessThan(
+      companyNameLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -245,7 +235,7 @@ extension UserSettingsModelQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -253,7 +243,7 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameBetween(
+      companyNameBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -262,7 +252,7 @@ extension UserSettingsModelQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'discoName',
+        property: r'companyName',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -273,13 +263,13 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameStartsWith(
+      companyNameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -287,13 +277,13 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameEndsWith(
+      companyNameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -301,10 +291,10 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameContains(String value, {bool caseSensitive = true}) {
+      companyNameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'discoName',
+        property: r'companyName',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -312,10 +302,10 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameMatches(String pattern, {bool caseSensitive = true}) {
+      companyNameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'discoName',
+        property: r'companyName',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
@@ -323,21 +313,31 @@ extension UserSettingsModelQueryFilter
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameIsEmpty() {
+      companyNameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'discoName',
+        property: r'companyName',
         value: '',
       ));
     });
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
-      discoNameIsNotEmpty() {
+      companyNameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'discoName',
+        property: r'companyName',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterFilterCondition>
+      darkModeEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'darkMode',
+        value: value,
       ));
     });
   }
@@ -418,6 +418,20 @@ extension UserSettingsModelQueryLinks
 extension UserSettingsModelQuerySortBy
     on QueryBuilder<UserSettingsModel, UserSettingsModel, QSortBy> {
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
+      sortByCompanyName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
+      sortByCompanyNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
       sortByDarkMode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.asc);
@@ -428,20 +442,6 @@ extension UserSettingsModelQuerySortBy
       sortByDarkModeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.desc);
-    });
-  }
-
-  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
-      sortByDiscoName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
-      sortByDiscoNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.desc);
     });
   }
 
@@ -463,6 +463,20 @@ extension UserSettingsModelQuerySortBy
 extension UserSettingsModelQuerySortThenBy
     on QueryBuilder<UserSettingsModel, UserSettingsModel, QSortThenBy> {
   QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
+      thenByCompanyName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
+      thenByCompanyNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
       thenByDarkMode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.asc);
@@ -473,20 +487,6 @@ extension UserSettingsModelQuerySortThenBy
       thenByDarkModeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.desc);
-    });
-  }
-
-  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
-      thenByDiscoName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<UserSettingsModel, UserSettingsModel, QAfterSortBy>
-      thenByDiscoNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.desc);
     });
   }
 
@@ -521,16 +521,16 @@ extension UserSettingsModelQuerySortThenBy
 extension UserSettingsModelQueryWhereDistinct
     on QueryBuilder<UserSettingsModel, UserSettingsModel, QDistinct> {
   QueryBuilder<UserSettingsModel, UserSettingsModel, QDistinct>
-      distinctByDarkMode() {
+      distinctByCompanyName({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'darkMode');
+      return query.addDistinctBy(r'companyName', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<UserSettingsModel, UserSettingsModel, QDistinct>
-      distinctByDiscoName({bool caseSensitive = true}) {
+      distinctByDarkMode() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'discoName', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'darkMode');
     });
   }
 
@@ -550,16 +550,16 @@ extension UserSettingsModelQueryProperty
     });
   }
 
-  QueryBuilder<UserSettingsModel, bool, QQueryOperations> darkModeProperty() {
+  QueryBuilder<UserSettingsModel, String, QQueryOperations>
+      companyNameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'darkMode');
+      return query.addPropertyName(r'companyName');
     });
   }
 
-  QueryBuilder<UserSettingsModel, String, QQueryOperations>
-      discoNameProperty() {
+  QueryBuilder<UserSettingsModel, bool, QQueryOperations> darkModeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'discoName');
+      return query.addPropertyName(r'darkMode');
     });
   }
 

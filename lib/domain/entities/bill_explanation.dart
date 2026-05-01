@@ -8,7 +8,7 @@ class BillExplanation extends Equatable {
   final List<BillCharge> charges;
   final String overallStatusUrdu; // "آپ کا بل درست ہے" or "زیادہ وصول کیا"
   final String? complaintText; // Auto-generated Urdu complaint (if overcharged)
-  final String helplineNumber; // DISCO-specific helpline
+  final String helplineNumber; // Company-specific helpline
 
   const BillExplanation({
     required this.bill,

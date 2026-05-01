@@ -94,9 +94,9 @@ class SettingsDatasource {
     });
   }
 
-  Future<void> updateDiscoName(String disco) async {
+  Future<void> updateCompanyName(String company) async {
     final s = await getSettings();
-    s.discoName = disco;
+    s.companyName = company;
     await saveSettings(s);
   }
 

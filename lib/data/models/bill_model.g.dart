@@ -52,125 +52,125 @@ const BillModelSchema = CollectionSchema(
       name: r'centerName',
       type: IsarType.string,
     ),
-    r'complaintsDial': PropertySchema(
+    r'companyGstNo': PropertySchema(
       id: 7,
+      name: r'companyGstNo',
+      type: IsarType.string,
+    ),
+    r'companyName': PropertySchema(
+      id: 8,
+      name: r'companyName',
+      type: IsarType.string,
+    ),
+    r'complaintsDial': PropertySchema(
+      id: 9,
       name: r'complaintsDial',
       type: IsarType.string,
     ),
     r'connectedLoad': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'connectedLoad',
       type: IsarType.string,
     ),
     r'connectionDate': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'connectionDate',
       type: IsarType.string,
     ),
     r'consumerNumber': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'consumerNumber',
       type: IsarType.string,
     ),
     r'costOfElectricity': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'costOfElectricity',
       type: IsarType.double,
     ),
     r'currentBill': PropertySchema(
-      id: 12,
+      id: 14,
       name: r'currentBill',
       type: IsarType.double,
     ),
-    r'discoName': PropertySchema(
-      id: 13,
-      name: r'discoName',
-      type: IsarType.string,
-    ),
     r'division': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'division',
       type: IsarType.string,
     ),
     r'dueDate': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
     r'edOnFpa': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'edOnFpa',
       type: IsarType.double,
     ),
     r'edo': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'edo',
       type: IsarType.string,
     ),
     r'electricityDuty': PropertySchema(
-      id: 18,
+      id: 19,
       name: r'electricityDuty',
       type: IsarType.double,
     ),
     r'etOnFpa': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'etOnFpa',
       type: IsarType.double,
     ),
     r'expectedAmount': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'expectedAmount',
       type: IsarType.double,
     ),
     r'extraTax': PropertySchema(
-      id: 21,
+      id: 22,
       name: r'extraTax',
       type: IsarType.double,
     ),
     r'fcSurcharge': PropertySchema(
-      id: 22,
+      id: 23,
       name: r'fcSurcharge',
       type: IsarType.double,
     ),
     r'feederName': PropertySchema(
-      id: 23,
+      id: 24,
       name: r'feederName',
       type: IsarType.string,
     ),
     r'fuelPriceAdjustment': PropertySchema(
-      id: 24,
+      id: 25,
       name: r'fuelPriceAdjustment',
       type: IsarType.double,
     ),
     r'furtherTax': PropertySchema(
-      id: 25,
+      id: 26,
       name: r'furtherTax',
       type: IsarType.double,
     ),
     r'furtherTaxOnFpa': PropertySchema(
-      id: 26,
+      id: 27,
       name: r'furtherTaxOnFpa',
       type: IsarType.double,
     ),
     r'gopTariff': PropertySchema(
-      id: 27,
+      id: 28,
       name: r'gopTariff',
       type: IsarType.double,
     ),
     r'gst': PropertySchema(
-      id: 28,
+      id: 29,
       name: r'gst',
       type: IsarType.double,
     ),
     r'gstOnFpa': PropertySchema(
-      id: 29,
+      id: 30,
       name: r'gstOnFpa',
       type: IsarType.double,
-    ),
-    r'iescoGstNo': PropertySchema(
-      id: 30,
-      name: r'iescoGstNo',
-      type: IsarType.string,
     ),
     r'imagePath': PropertySchema(
       id: 31,
@@ -405,14 +405,14 @@ const BillModelSchema = CollectionSchema(
   deserializeProp: _billModelDeserializeProp,
   idName: r'id',
   indexes: {
-    r'discoName': IndexSchema(
-      id: -1498229875508568783,
-      name: r'discoName',
+    r'companyName': IndexSchema(
+      id: 6530936739720993813,
+      name: r'companyName',
       unique: false,
       replace: false,
       properties: [
         IndexPropertySchema(
-          name: r'discoName',
+          name: r'companyName',
           type: IndexType.hash,
           caseSensitive: true,
         )
@@ -484,6 +484,13 @@ int _billModelEstimateSize(
     }
   }
   {
+    final value = object.companyGstNo;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.companyName.length * 3;
+  {
     final value = object.complaintsDial;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -502,7 +509,6 @@ int _billModelEstimateSize(
     }
   }
   bytesCount += 3 + object.consumerNumber.length * 3;
-  bytesCount += 3 + object.discoName.length * 3;
   {
     final value = object.division;
     if (value != null) {
@@ -517,12 +523,6 @@ int _billModelEstimateSize(
   }
   {
     final value = object.feederName;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.iescoGstNo;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -678,30 +678,30 @@ void _billModelSerialize(
   writer.writeString(offsets[4], object.block);
   writer.writeString(offsets[5], object.calculation);
   writer.writeString(offsets[6], object.centerName);
-  writer.writeString(offsets[7], object.complaintsDial);
-  writer.writeString(offsets[8], object.connectedLoad);
-  writer.writeString(offsets[9], object.connectionDate);
-  writer.writeString(offsets[10], object.consumerNumber);
-  writer.writeDouble(offsets[11], object.costOfElectricity);
-  writer.writeDouble(offsets[12], object.currentBill);
-  writer.writeString(offsets[13], object.discoName);
-  writer.writeString(offsets[14], object.division);
-  writer.writeDateTime(offsets[15], object.dueDate);
-  writer.writeDouble(offsets[16], object.edOnFpa);
-  writer.writeString(offsets[17], object.edo);
-  writer.writeDouble(offsets[18], object.electricityDuty);
-  writer.writeDouble(offsets[19], object.etOnFpa);
-  writer.writeDouble(offsets[20], object.expectedAmount);
-  writer.writeDouble(offsets[21], object.extraTax);
-  writer.writeDouble(offsets[22], object.fcSurcharge);
-  writer.writeString(offsets[23], object.feederName);
-  writer.writeDouble(offsets[24], object.fuelPriceAdjustment);
-  writer.writeDouble(offsets[25], object.furtherTax);
-  writer.writeDouble(offsets[26], object.furtherTaxOnFpa);
-  writer.writeDouble(offsets[27], object.gopTariff);
-  writer.writeDouble(offsets[28], object.gst);
-  writer.writeDouble(offsets[29], object.gstOnFpa);
-  writer.writeString(offsets[30], object.iescoGstNo);
+  writer.writeString(offsets[7], object.companyGstNo);
+  writer.writeString(offsets[8], object.companyName);
+  writer.writeString(offsets[9], object.complaintsDial);
+  writer.writeString(offsets[10], object.connectedLoad);
+  writer.writeString(offsets[11], object.connectionDate);
+  writer.writeString(offsets[12], object.consumerNumber);
+  writer.writeDouble(offsets[13], object.costOfElectricity);
+  writer.writeDouble(offsets[14], object.currentBill);
+  writer.writeString(offsets[15], object.division);
+  writer.writeDateTime(offsets[16], object.dueDate);
+  writer.writeDouble(offsets[17], object.edOnFpa);
+  writer.writeString(offsets[18], object.edo);
+  writer.writeDouble(offsets[19], object.electricityDuty);
+  writer.writeDouble(offsets[20], object.etOnFpa);
+  writer.writeDouble(offsets[21], object.expectedAmount);
+  writer.writeDouble(offsets[22], object.extraTax);
+  writer.writeDouble(offsets[23], object.fcSurcharge);
+  writer.writeString(offsets[24], object.feederName);
+  writer.writeDouble(offsets[25], object.fuelPriceAdjustment);
+  writer.writeDouble(offsets[26], object.furtherTax);
+  writer.writeDouble(offsets[27], object.furtherTaxOnFpa);
+  writer.writeDouble(offsets[28], object.gopTariff);
+  writer.writeDouble(offsets[29], object.gst);
+  writer.writeDouble(offsets[30], object.gstOnFpa);
   writer.writeString(offsets[31], object.imagePath);
   writer.writeDouble(offsets[32], object.incomeTax);
   writer.writeDouble(offsets[33], object.installment);
@@ -768,31 +768,31 @@ BillModel _billModelDeserialize(
   object.block = reader.readStringOrNull(offsets[4]);
   object.calculation = reader.readStringOrNull(offsets[5]);
   object.centerName = reader.readStringOrNull(offsets[6]);
-  object.complaintsDial = reader.readStringOrNull(offsets[7]);
-  object.connectedLoad = reader.readStringOrNull(offsets[8]);
-  object.connectionDate = reader.readStringOrNull(offsets[9]);
-  object.consumerNumber = reader.readString(offsets[10]);
-  object.costOfElectricity = reader.readDoubleOrNull(offsets[11]);
-  object.currentBill = reader.readDoubleOrNull(offsets[12]);
-  object.discoName = reader.readString(offsets[13]);
-  object.division = reader.readStringOrNull(offsets[14]);
-  object.dueDate = reader.readDateTime(offsets[15]);
-  object.edOnFpa = reader.readDoubleOrNull(offsets[16]);
-  object.edo = reader.readStringOrNull(offsets[17]);
-  object.electricityDuty = reader.readDoubleOrNull(offsets[18]);
-  object.etOnFpa = reader.readDoubleOrNull(offsets[19]);
-  object.expectedAmount = reader.readDouble(offsets[20]);
-  object.extraTax = reader.readDoubleOrNull(offsets[21]);
-  object.fcSurcharge = reader.readDoubleOrNull(offsets[22]);
-  object.feederName = reader.readStringOrNull(offsets[23]);
-  object.fuelPriceAdjustment = reader.readDoubleOrNull(offsets[24]);
-  object.furtherTax = reader.readDoubleOrNull(offsets[25]);
-  object.furtherTaxOnFpa = reader.readDoubleOrNull(offsets[26]);
-  object.gopTariff = reader.readDoubleOrNull(offsets[27]);
-  object.gst = reader.readDoubleOrNull(offsets[28]);
-  object.gstOnFpa = reader.readDoubleOrNull(offsets[29]);
+  object.companyGstNo = reader.readStringOrNull(offsets[7]);
+  object.companyName = reader.readString(offsets[8]);
+  object.complaintsDial = reader.readStringOrNull(offsets[9]);
+  object.connectedLoad = reader.readStringOrNull(offsets[10]);
+  object.connectionDate = reader.readStringOrNull(offsets[11]);
+  object.consumerNumber = reader.readString(offsets[12]);
+  object.costOfElectricity = reader.readDoubleOrNull(offsets[13]);
+  object.currentBill = reader.readDoubleOrNull(offsets[14]);
+  object.division = reader.readStringOrNull(offsets[15]);
+  object.dueDate = reader.readDateTime(offsets[16]);
+  object.edOnFpa = reader.readDoubleOrNull(offsets[17]);
+  object.edo = reader.readStringOrNull(offsets[18]);
+  object.electricityDuty = reader.readDoubleOrNull(offsets[19]);
+  object.etOnFpa = reader.readDoubleOrNull(offsets[20]);
+  object.expectedAmount = reader.readDouble(offsets[21]);
+  object.extraTax = reader.readDoubleOrNull(offsets[22]);
+  object.fcSurcharge = reader.readDoubleOrNull(offsets[23]);
+  object.feederName = reader.readStringOrNull(offsets[24]);
+  object.fuelPriceAdjustment = reader.readDoubleOrNull(offsets[25]);
+  object.furtherTax = reader.readDoubleOrNull(offsets[26]);
+  object.furtherTaxOnFpa = reader.readDoubleOrNull(offsets[27]);
+  object.gopTariff = reader.readDoubleOrNull(offsets[28]);
+  object.gst = reader.readDoubleOrNull(offsets[29]);
+  object.gstOnFpa = reader.readDoubleOrNull(offsets[30]);
   object.id = id;
-  object.iescoGstNo = reader.readStringOrNull(offsets[30]);
   object.imagePath = reader.readStringOrNull(offsets[31]);
   object.incomeTax = reader.readDoubleOrNull(offsets[32]);
   object.installment = reader.readDoubleOrNull(offsets[33]);
@@ -871,39 +871,39 @@ P _billModelDeserializeProp<P>(
     case 7:
       return (reader.readStringOrNull(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 13:
       return (reader.readString(offset)) as P;
+    case 13:
+      return (reader.readDoubleOrNull(offset)) as P;
     case 14:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 15:
-      return (reader.readDateTime(offset)) as P;
-    case 16:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 17:
       return (reader.readStringOrNull(offset)) as P;
-    case 18:
+    case 16:
+      return (reader.readDateTime(offset)) as P;
+    case 17:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 18:
+      return (reader.readStringOrNull(offset)) as P;
     case 19:
       return (reader.readDoubleOrNull(offset)) as P;
     case 20:
-      return (reader.readDouble(offset)) as P;
-    case 21:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 21:
+      return (reader.readDouble(offset)) as P;
     case 22:
       return (reader.readDoubleOrNull(offset)) as P;
     case 23:
-      return (reader.readStringOrNull(offset)) as P;
-    case 24:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 24:
+      return (reader.readStringOrNull(offset)) as P;
     case 25:
       return (reader.readDoubleOrNull(offset)) as P;
     case 26:
@@ -915,7 +915,7 @@ P _billModelDeserializeProp<P>(
     case 29:
       return (reader.readDoubleOrNull(offset)) as P;
     case 30:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 31:
       return (reader.readStringOrNull(offset)) as P;
     case 32:
@@ -1113,45 +1113,45 @@ extension BillModelQueryWhere
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterWhereClause> discoNameEqualTo(
-      String discoName) {
+  QueryBuilder<BillModel, BillModel, QAfterWhereClause> companyNameEqualTo(
+      String companyName) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'discoName',
-        value: [discoName],
+        indexName: r'companyName',
+        value: [companyName],
       ));
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterWhereClause> discoNameNotEqualTo(
-      String discoName) {
+  QueryBuilder<BillModel, BillModel, QAfterWhereClause> companyNameNotEqualTo(
+      String companyName) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'discoName',
+              indexName: r'companyName',
               lower: [],
-              upper: [discoName],
+              upper: [companyName],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'discoName',
-              lower: [discoName],
+              indexName: r'companyName',
+              lower: [companyName],
               includeLower: false,
               upper: [],
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'discoName',
-              lower: [discoName],
+              indexName: r'companyName',
+              lower: [companyName],
               includeLower: false,
               upper: [],
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: r'discoName',
+              indexName: r'companyName',
               lower: [],
-              upper: [discoName],
+              upper: [companyName],
               includeUpper: false,
             ));
       }
@@ -2108,6 +2108,293 @@ extension BillModelQueryFilter
   }
 
   QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'companyGstNo',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'companyGstNo',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyGstNoEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyGstNoBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'companyGstNo',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'companyGstNo',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyGstNoMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'companyGstNo',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'companyGstNo',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyGstNoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'companyGstNo',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyNameGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'companyName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'companyName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> companyNameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'companyName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'companyName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      companyNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'companyName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
       complaintsDialIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2866,138 +3153,6 @@ extension BillModelQueryFilter
         upper: upper,
         includeUpper: includeUpper,
         epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      discoNameGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'discoName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'discoName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'discoName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> discoNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'discoName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      discoNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'discoName',
-        value: '',
       ));
     });
   }
@@ -4500,157 +4655,6 @@ extension BillModelQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'iescoGstNo',
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      iescoGstNoIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'iescoGstNo',
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      iescoGstNoGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'iescoGstNo',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      iescoGstNoStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'iescoGstNo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> iescoGstNoMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'iescoGstNo',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      iescoGstNoIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'iescoGstNo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      iescoGstNoIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'iescoGstNo',
-        value: '',
       ));
     });
   }
@@ -9630,6 +9634,30 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByCompanyGstNo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyGstNo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByCompanyGstNoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyGstNo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByCompanyName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByCompanyNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.desc);
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByComplaintsDial() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'complaintsDial', Sort.asc);
@@ -9700,18 +9728,6 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
   QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByCurrentBillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentBill', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByDiscoName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByDiscoNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.desc);
     });
   }
 
@@ -9905,18 +9921,6 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
   QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByGstOnFpaDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'gstOnFpa', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIescoGstNo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iescoGstNo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIescoGstNoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iescoGstNo', Sort.desc);
     });
   }
 
@@ -10539,6 +10543,30 @@ extension BillModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByCompanyGstNo() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyGstNo', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByCompanyGstNoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyGstNo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByCompanyName() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByCompanyNameDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'companyName', Sort.desc);
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByComplaintsDial() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'complaintsDial', Sort.asc);
@@ -10609,18 +10637,6 @@ extension BillModelQuerySortThenBy
   QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByCurrentBillDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'currentBill', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByDiscoName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByDiscoNameDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'discoName', Sort.desc);
     });
   }
 
@@ -10826,18 +10842,6 @@ extension BillModelQuerySortThenBy
   QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIescoGstNo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iescoGstNo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIescoGstNoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iescoGstNo', Sort.desc);
     });
   }
 
@@ -11422,6 +11426,20 @@ extension BillModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QDistinct> distinctByCompanyGstNo(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'companyGstNo', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QDistinct> distinctByCompanyName(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'companyName', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QDistinct> distinctByComplaintsDial(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -11463,13 +11481,6 @@ extension BillModelQueryWhereDistinct
   QueryBuilder<BillModel, BillModel, QDistinct> distinctByCurrentBill() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currentBill');
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QDistinct> distinctByDiscoName(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'discoName', caseSensitive: caseSensitive);
     });
   }
 
@@ -11570,13 +11581,6 @@ extension BillModelQueryWhereDistinct
   QueryBuilder<BillModel, BillModel, QDistinct> distinctByGstOnFpa() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'gstOnFpa');
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QDistinct> distinctByIescoGstNo(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'iescoGstNo', caseSensitive: caseSensitive);
     });
   }
 
@@ -11921,6 +11925,18 @@ extension BillModelQueryProperty
     });
   }
 
+  QueryBuilder<BillModel, String?, QQueryOperations> companyGstNoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'companyGstNo');
+    });
+  }
+
+  QueryBuilder<BillModel, String, QQueryOperations> companyNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'companyName');
+    });
+  }
+
   QueryBuilder<BillModel, String?, QQueryOperations> complaintsDialProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'complaintsDial');
@@ -11955,12 +11971,6 @@ extension BillModelQueryProperty
   QueryBuilder<BillModel, double?, QQueryOperations> currentBillProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currentBill');
-    });
-  }
-
-  QueryBuilder<BillModel, String, QQueryOperations> discoNameProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'discoName');
     });
   }
 
@@ -12058,12 +12068,6 @@ extension BillModelQueryProperty
   QueryBuilder<BillModel, double?, QQueryOperations> gstOnFpaProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'gstOnFpa');
-    });
-  }
-
-  QueryBuilder<BillModel, String?, QQueryOperations> iescoGstNoProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'iescoGstNo');
     });
   }
 

@@ -78,7 +78,7 @@ Future<void> initDependencies(Isar isar) async {
   sl.registerFactory(
     () => BillExplainBloc(explainBillUseCase: sl<ExplainBillUseCase>()),
   );
-  sl.registerLazySingleton<BillHistoryBlocImpl>(
+  sl.registerFactory<BillHistoryBlocImpl>(
     () => BillHistoryBlocImpl(
       getBillHistoryUseCase: sl<GetBillHistoryUseCase>(),
       billRepository: sl<BillRepository>(),

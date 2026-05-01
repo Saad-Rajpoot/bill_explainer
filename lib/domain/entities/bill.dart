@@ -18,9 +18,8 @@ class PaymentHistoryEntry extends Equatable {
   List<Object?> get props => [month, units, bill, payment];
 }
 
-/// Domain entity for a scanned IESCO electricity bill.
-/// Fields are organized by the official 10-box layout and named
-/// to exactly match the bill labels.
+/// Domain entity for a generic electricity bill.
+/// Fields are organized by a standardized 10-box layout.
 class Bill extends Equatable {
   // ── App-Internal ───────────────────────────────────────────────────
   final String id;
@@ -35,7 +34,7 @@ class Bill extends Equatable {
   final double overchargeAmount;
 
   // ── BOX 1: Connection Info ─────────────────────────────────────────
-  final String discoName;
+  final String companyName;
   final String? connectionDate;
   final String? connectedLoad;
   final String? edo;
@@ -56,7 +55,7 @@ class Bill extends Equatable {
   final String? noOfAct;
   final String? unBillAge;
   final String? feederName;
-  final String? iescoGstNo;
+  final String? companyGstNo;
 
   // ── BOX 3: Name & Address ──────────────────────────────────────────
   final String? name;
@@ -74,7 +73,7 @@ class Bill extends Equatable {
   final int unitsConsumed;
   final String? status;
 
-  // ── BOX 6: IESCO Charges ───────────────────────────────────────────
+  // ── BOX 6: Company Charges ────────────────────────────────────────
   final double? costOfElectricity;
   final double? meterRentFixCharges;
   final double? serviceRent;
@@ -132,7 +131,7 @@ class Bill extends Equatable {
     required this.isOvercharged,
     required this.overchargeAmount,
     // Box 1
-    required this.discoName,
+    required this.companyName,
     this.connectionDate,
     this.connectedLoad,
     this.edo,
@@ -152,7 +151,7 @@ class Bill extends Equatable {
     this.noOfAct,
     this.unBillAge,
     this.feederName,
-    this.iescoGstNo,
+    this.companyGstNo,
     // Box 3
     this.name,
     this.sonOf,
@@ -212,7 +211,7 @@ class Bill extends Equatable {
 
   bool get isPastDue => DateTime.now().isAfter(dueDate);
 
-  double get totalIescoCharges =>
+  double get totalCompanyCharges =>
       (costOfElectricity ?? 0) +
       (meterRentFixCharges ?? 0) +
       (serviceRent ?? 0) +
@@ -231,6 +230,6 @@ class Bill extends Equatable {
 
   @override
   List<Object?> get props => [
-    id, consumerNumber, discoName, scannedAt, billMonth, totalAmount, unitsConsumed,
+    id, consumerNumber, companyName, scannedAt, billMonth, totalAmount, unitsConsumed,
   ];
 }

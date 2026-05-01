@@ -7,16 +7,22 @@ class UrduFormatter {
 
   // ─── Currency ─────────────────────────────────────────────────────
 
-  /// Formats a PKR amount: "₨ ۱,۲۳۴"
-  static String pkr(double amount) {
+  /// Formats a PKR amount: "Rs. 1,234" for English, "₨ ۱,۲۳۴" for Urdu
+  static String pkr(double amount, {String locale = 'ur'}) {
     final formatted = NumberFormat('#,##0.00', 'en_PK').format(amount);
+    if (locale == 'en') {
+      return 'Rs. $formatted';
+    }
     return '₨ $formatted';
   }
 
   /// Formats PKR in Eastern Arabic numerals (Urdu digits)
-  static String pkrUrdu(double amount) {
+  static String pkrUrdu(double amount, {String locale = 'ur'}) {
     final formatted = NumberFormat('#,##0.00', 'en_PK').format(amount);
-    return '₨ ${_toUrduDigits(formatted)}';
+    if (locale == 'en') {
+      return 'Rs. $formatted';
+    }
+    return '₨ ${toUrduDigits(formatted)}';
   }
 
   // ─── Units ────────────────────────────────────────────────────────
@@ -26,7 +32,7 @@ class UrduFormatter {
     if (locale == 'en') {
       return '$units Units';
     }
-    return '${_toUrduDigits(units.toString())} یونٹ';
+    return '${toUrduDigits(units.toString())} یونٹ';
   }
 
   static String unitsPlain(int units) => units.toString();
@@ -39,7 +45,7 @@ class UrduFormatter {
       return DateFormat('MMMM yyyy').format(date);
     }
     final month = _urduMonths[date.month - 1];
-    final year = _toUrduDigits(date.year.toString());
+    final year = toUrduDigits(date.year.toString());
     return '$month $year';
   }
 
@@ -48,9 +54,9 @@ class UrduFormatter {
     if (locale == 'en') {
       return DateFormat('dd MMMM yyyy').format(date);
     }
-    final day = _toUrduDigits(date.day.toString());
+    final day = toUrduDigits(date.day.toString());
     final month = _urduMonths[date.month - 1];
-    final year = _toUrduDigits(date.year.toString());
+    final year = toUrduDigits(date.year.toString());
     return '$day $month $year';
   }
 
@@ -68,18 +74,18 @@ class UrduFormatter {
 
     if (diff < 0) return '$dateStr (میعاد ختم)';
     if (diff == 0) return '$dateStr (آج آخری دن)';
-    return '$dateStr (${_toUrduDigits(diff.toString())} دن باقی)';
+    return '$dateStr (${toUrduDigits(diff.toString())} دن باقی)';
   }
 
   // ─── Percentage ───────────────────────────────────────────────────
 
   /// "۱۸٪"
   static String percent(double value) =>
-      '${_toUrduDigits((value * 100).toStringAsFixed(0))}٪';
+      '${toUrduDigits((value * 100).toStringAsFixed(0))}٪';
 
   // ─── Helpers ─────────────────────────────────────────────────────
 
-  static String _toUrduDigits(String input) {
+  static String toUrduDigits(String input) {
     const westernDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     const urduDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     var result = input;

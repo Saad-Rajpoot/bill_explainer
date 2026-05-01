@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:provider/provider.dart';
+import '../../../language/language_provider.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/utils/tariff_calculator.dart';
@@ -24,6 +26,7 @@ class ChargeCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusColor = _statusColor(charge.status);
+    final lp = Provider.of<LanguageProvider>(context);
 
     return GestureDetector(
       onTap: onToggle,
@@ -55,7 +58,7 @@ class ChargeCardWidget extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(UrduFormatter.pkr(charge.amount),
+                                Text(UrduFormatter.pkr(charge.amount, locale: lp.currentLanguageCode),
                                     style: const TextStyle(
                                         fontFamily: 'Roboto',
                                         fontSize: 18,
@@ -64,7 +67,7 @@ class ChargeCardWidget extends StatelessWidget {
                                 if (charge.expectedAmount != null &&
                                     charge.isOvercharged)
                                   Text(
-                                    'متوقع: ${UrduFormatter.pkr(charge.expectedAmount!)}',
+                                    'متوقع: ${UrduFormatter.pkr(charge.expectedAmount!, locale: lp.currentLanguageCode)}',
                                     style: const TextStyle(
                                         fontFamily: 'NotoNastaliqUrdu',
                                         fontSize: 12,
@@ -175,6 +178,7 @@ class _OverchargeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lp = Provider.of<LanguageProvider>(context);
     return Container(
       margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.all(12),
@@ -185,7 +189,7 @@ class _OverchargeRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(UrduFormatter.pkr(charge.overchargeAmount),
+          Text(UrduFormatter.pkr(charge.overchargeAmount, locale: lp.currentLanguageCode),
               style: const TextStyle(fontFamily: 'Roboto', fontSize: 16,
                   fontWeight: FontWeight.w700, color: AppColors.error)),
           const Text('زیادہ وصول کیا گیا',

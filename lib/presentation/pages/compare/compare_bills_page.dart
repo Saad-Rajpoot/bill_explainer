@@ -198,7 +198,7 @@ class _Selector extends StatelessWidget {
                     trailing: const Icon(Icons.chevron_right_rounded),
                     title: Text(UrduFormatter.billMonth(bills[i].billMonth, locale: lp.currentLanguageCode),
                         style: TextStyle(fontFamily: lp.currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto', fontWeight: FontWeight.bold)),
-                    subtitle: Text(UrduFormatter.pkr(bills[i].totalAmount),
+                    subtitle: Text(UrduFormatter.pkr(bills[i].totalAmount, locale: lp.currentLanguageCode),
                         style: const TextStyle(fontFamily: 'Roboto', color: AppColors.primary)),
                   ),
                 ),
@@ -291,33 +291,33 @@ class _Table extends StatelessWidget {
               isIncrease: b2.unitsConsumed > b1.unitsConsumed),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('compareCost'),
-              v1: UrduFormatter.pkr(b1.costOfElectricity ?? 0),
-              v2: UrduFormatter.pkr(b2.costOfElectricity ?? 0),
+              v1: UrduFormatter.pkr(b1.costOfElectricity ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.costOfElectricity ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: (b2.costOfElectricity ?? 0) > (b1.costOfElectricity ?? 0)),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('compareFpa'),
-              v1: UrduFormatter.pkr(b1.fuelPriceAdjustment ?? 0),
-              v2: UrduFormatter.pkr(b2.fuelPriceAdjustment ?? 0),
+              v1: UrduFormatter.pkr(b1.fuelPriceAdjustment ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.fuelPriceAdjustment ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: (b2.fuelPriceAdjustment ?? 0) > (b1.fuelPriceAdjustment ?? 0)),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('compareFc'),
-              v1: UrduFormatter.pkr(b1.fcSurcharge ?? 0),
-              v2: UrduFormatter.pkr(b2.fcSurcharge ?? 0),
+              v1: UrduFormatter.pkr(b1.fcSurcharge ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.fcSurcharge ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: (b2.fcSurcharge ?? 0) > (b1.fcSurcharge ?? 0)),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('compareGst'),
-              v1: UrduFormatter.pkr(b1.gst ?? 0),
-              v2: UrduFormatter.pkr(b2.gst ?? 0),
+              v1: UrduFormatter.pkr(b1.gst ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.gst ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: (b2.gst ?? 0) > (b1.gst ?? 0)),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('compareTax'),
-              v1: UrduFormatter.pkr(b1.incomeTax ?? 0),
-              v2: UrduFormatter.pkr(b2.incomeTax ?? 0),
+              v1: UrduFormatter.pkr(b1.incomeTax ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.incomeTax ?? 0, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: (b2.incomeTax ?? 0) > (b1.incomeTax ?? 0)),
           const Divider(height: 16),
           _Row(field: Provider.of<LanguageProvider>(context).translate('historyAmount'),
-              v1: UrduFormatter.pkr(b1.totalAmount),
-              v2: UrduFormatter.pkr(b2.totalAmount),
+              v1: UrduFormatter.pkr(b1.totalAmount, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+              v2: UrduFormatter.pkr(b2.totalAmount, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
               isIncrease: b2.totalAmount > b1.totalAmount,
               isBold: true),
           const SizedBox(height: 24),
@@ -336,11 +336,11 @@ class _Table extends StatelessWidget {
               if (unitsDiff > 0) {
                 text = lp.translate('compare_more')
                   .replaceAll('{diff}', unitsDiff.toString())
-                  .replaceAll('{amount}', UrduFormatter.pkr(amountDiff.abs()));
+                  .replaceAll('{amount}', UrduFormatter.pkr(amountDiff.abs(), locale: lp.currentLanguageCode));
               } else if (unitsDiff < 0) {
                 text = lp.translate('compare_less')
                   .replaceAll('{diff}', unitsDiff.abs().toString())
-                  .replaceAll('{amount}', UrduFormatter.pkr(amountDiff.abs()));
+                  .replaceAll('{amount}', UrduFormatter.pkr(amountDiff.abs(), locale: lp.currentLanguageCode));
               } else {
                 text = lp.translate('compare_equal');
               }

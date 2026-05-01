@@ -16,7 +16,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String _disco = WapdaTariffs.lesco;
+  String _company = WapdaTariffs.lesco;
   bool _darkMode = false;
   bool _notifications = true;
   String _version = '';
@@ -32,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final info = await PackageInfo.fromPlatform();
     if (mounted) {
       setState(() {
-        _disco = prefs.getString('disco') ?? WapdaTariffs.lesco;
+        _company = prefs.getString('company') ?? WapdaTariffs.lesco;
         _darkMode = prefs.getBool('dark_mode') ?? false;
         _notifications = prefs.getBool('notifications') ?? true;
         _version = info.version;
@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('disco', _disco);
+    await prefs.setString('company', _company);
     await prefs.setBool('dark_mode', _darkMode);
     await prefs.setBool('notifications', _notifications);
   }
@@ -61,11 +61,11 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          // ─── DISCO selection ──────────────────────────────────
-          _Section(title: AppStrings.settingsDisco, children: [
-            _DiscoDropdown(
-              value: _disco,
-              onChanged: (d) { setState(() => _disco = d); _save(); },
+          // ─── Company selection ──────────────────────────────────
+          _Section(title: AppStrings.settingsCompany, children: [
+            _CompanyDropdown(
+              value: _company,
+              onChanged: (d) { setState(() => _company = d); _save(); },
             ),
           ]).animate().fadeIn(),
 
@@ -187,12 +187,12 @@ class _Section extends StatelessWidget {
   }
 }
 
-// ─── DISCO dropdown ─────────────────────────────────────────────────────────
+// ─── Company dropdown ─────────────────────────────────────────────────────────
 
-class _DiscoDropdown extends StatelessWidget {
+class _CompanyDropdown extends StatelessWidget {
   final String value;
   final ValueChanged<String> onChanged;
-  const _DiscoDropdown({required this.value, required this.onChanged});
+  const _CompanyDropdown({required this.value, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +203,7 @@ class _DiscoDropdown extends StatelessWidget {
           value: value,
           isExpanded: true,
           alignment: AlignmentDirectional.centerEnd,
-          items: WapdaTariffs.allDiscos.map((d) {
+          items: WapdaTariffs.allCompanies.map((d) {
             return DropdownMenuItem(
               value: d,
               child: Align(
@@ -214,7 +214,7 @@ class _DiscoDropdown extends StatelessWidget {
                   children: [
                     Text(d, style: const TextStyle(fontFamily: 'Roboto',
                         fontWeight: FontWeight.w600, fontSize: 15)),
-                    Text(WapdaTariffs.discoUrduNames[d] ?? '',
+                    Text(WapdaTariffs.companyUrduNames[d] ?? '',
                         style: const TextStyle(fontFamily: 'NotoNastaliqUrdu',
                             fontSize: 12, color: AppColors.textSecondary)),
                   ],

@@ -1,8 +1,8 @@
 import '../../../../domain/entities/bill.dart';
 
-/// DTO from [GeminiBillService]. Fields mirror the 10-box IESCO bill exactly.
+/// DTO from [GeminiBillService]. Fields mirror a standardized 10-box electricity bill.
 class ParsedBill {
-  final String discoName;
+  final String companyName;
   final double confidenceScore;
   final List<PaymentHistoryEntry> paymentHistory;
 
@@ -27,7 +27,7 @@ class ParsedBill {
   final String? noOfAct;          // NO OF ACT
   final String? unBillAge;        // UN-BILL-AGE
   final String? feederName;       // FEEDER NAME
-  final String? iescoGstNo;       // IESCO GST NO
+  final String? companyGstNo;       // COMPANY GST NO
 
   // ── BOX 3: Name & Address ──────────────────────────────────────────
   final String? name;    // NAME
@@ -45,7 +45,7 @@ class ParsedBill {
   final int? unitsConsumed;     // UNITS
   final String? status;         // STATUS
 
-  // ── BOX 6: IESCO Charges ───────────────────────────────────────────
+  // ── BOX 6: Company Charges ────────────────────────────────────────
   final String? unitsConsumedB6;      // UNITS CONSUMED (display string)
   final double? costOfElectricity;    // COST OF ELECTRICITY
   final double? meterRentFixCharges;  // METER RENT FIX CHARGES
@@ -93,14 +93,14 @@ class ParsedBill {
   final String? sms;             // SMS
 
   ParsedBill({
-    required this.discoName,
+    required this.companyName,
     this.confidenceScore = 0.0,
     this.paymentHistory = const [],
     this.connectionDate, this.connectedLoad, this.edo,
     this.billMonthRaw, this.readingDate, this.issueDate, this.dueDateRaw,
     this.consumerNumber, this.tariff, this.load, this.oldAccountNumber,
     this.division, this.subDivision, this.referenceNumber, this.lockAge,
-    this.noOfAct, this.unBillAge, this.feederName, this.iescoGstNo,
+    this.noOfAct, this.unBillAge, this.feederName, this.companyGstNo,
     this.name, this.sonOf, this.plotNo, this.stNo, this.block, this.area,
     this.meterNo, this.previousReading, this.presentReading, this.mf,
     this.unitsConsumed, this.status,

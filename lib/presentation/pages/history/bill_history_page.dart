@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../language/language_provider.dart';
@@ -34,7 +35,10 @@ class _HistoryView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(Provider.of<LanguageProvider>(context).translate('historyTitle')),
+        title: Text(Provider.of<LanguageProvider>(context).translate('historyTitle'),
+            style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 18)
+                : GoogleFonts.outfit(fontWeight: FontWeight.w600)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () => context.go(AppRoutes.home),
@@ -87,7 +91,7 @@ class _LoadedView extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(child: _StatCard(
                   label: Provider.of<LanguageProvider>(context).translate('historyAmount'),
-                  value: UrduFormatter.pkr(state.totalAmount),
+                  value: UrduFormatter.pkr(state.totalAmount, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
                   icon: Icons.payments_rounded, color: AppColors.primary,
                 )),
               ],
@@ -152,9 +156,9 @@ class _BillChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(Provider.of<LanguageProvider>(context).translate('chartTitle'),
-              style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
-                  fontSize: 16, fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary)),
+              style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                  ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)
+                  : GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
           const SizedBox(height: 20),
           SizedBox(
             height: 150,
@@ -248,21 +252,23 @@ class _BillTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(UrduFormatter.billMonth(bill.billMonth, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
-                      style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
-                          fontSize: 15, fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary)),
+                      style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                          ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)
+                          : GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                   const SizedBox(height: 4),
-                  Text('${bill.discoName} • ${UrduFormatter.units(bill.unitsConsumed, locale: Provider.of<LanguageProvider>(context).currentLanguageCode)}',
-                      style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
-                          fontSize: 13, color: AppColors.textSecondary)),
+                  Text('${Provider.of<LanguageProvider>(context).translate('app_title')} • ${UrduFormatter.units(bill.unitsConsumed, locale: Provider.of<LanguageProvider>(context).currentLanguageCode)}',
+                      style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                          ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 13, color: AppColors.textSecondary)
+                          : GoogleFonts.outfit(fontSize: 13, color: AppColors.textSecondary)),
                 ],
               ),
             ),
             const SizedBox(width: 12),
             // Amount
-            Text(UrduFormatter.pkr(bill.totalAmount),
-                style: const TextStyle(fontFamily: 'Roboto', fontSize: 16,
-                    fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            Text(UrduFormatter.pkr(bill.totalAmount, locale: Provider.of<LanguageProvider>(context).currentLanguageCode),
+                style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                    ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)
+                    : GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
           ],
         ),
       ),
@@ -296,10 +302,13 @@ class _StatCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(value, style: TextStyle(fontFamily: 'Roboto',
-                    fontSize: 16, fontWeight: FontWeight.w700, color: color)),
-                Text(label, style: TextStyle(fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
-                    fontSize: 12, color: AppColors.textSecondary)),
+                Text(value, style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                    ? TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 16, fontWeight: FontWeight.w700, color: color)
+                    : GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w700, color: color)),
+                const SizedBox(height: 2),
+                Text(label, style: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur'
+                    ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 12, color: AppColors.textSecondary)
+                    : GoogleFonts.outfit(fontSize: 12, color: AppColors.textSecondary)),
               ],
             ),
           ),

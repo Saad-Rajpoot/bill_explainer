@@ -23,11 +23,11 @@ abstract class AppStrings {
   static const String onboardingNext = 'آگے'; // Next
   static const String onboardingStart = 'شروع کریں'; // Get Started
 
-  // ─── DISCO Selection ──────────────────────────────────────────────
-  static const String discoSelectTitle = 'اپنی بجلی کمپنی منتخب کریں';
+  // ─── Company Selection ────────────────────────────────────────────
+  static const String companySelectTitle = 'اپنی بجلی کمپنی منتخب کریں';
   static const String discoSelectSubtitle =
       'آپ کے علاقے کی بجلی فراہم کرنے والی کمپنی کون سی ہے؟';
-  static const String discoConfirm = 'تصدیق کریں'; // Confirm
+  static const String companyConfirm = 'تصدیق کریں'; // Confirm
 
   // ─── Home ─────────────────────────────────────────────────────────
   static const String homeGreeting = 'السلام علیکم'; // Hello
@@ -171,7 +171,7 @@ abstract class AppStrings {
 
   // ─── Settings ─────────────────────────────────────────────────────
   static const String settingsTitle = 'ترتیبات'; // Settings
-  static const String settingsDisco = 'بجلی کمپنی';
+  static const String settingsCompany = 'بجلی کمپنی';
   static const String settingsConsumerNo = 'صارف نمبر';
   static const String settingsDarkMode = 'تاریک طریقہ'; // Dark Mode
   static const String settingsNotifications = 'اطلاعات'; // Notifications

@@ -48,7 +48,7 @@ class BillRepositoryImpl implements BillRepository {
 
       final tariff = TariffCalculator.calculate(
         units: parsed.unitsConsumed ?? 0,
-        discoName: parsed.discoName,
+        companyName: parsed.companyName,
         fcAdjustmentPerUnit: fcPerUnit,
         qtaPerUnit: qtaPerUnit,
       );
@@ -57,7 +57,7 @@ class BillRepositoryImpl implements BillRepository {
       final validation = TariffCalculator.validateBill(
         units: parsed.unitsConsumed ?? 0,
         billedAmount: parsed.totalAmount ?? 0.0,
-        discoName: parsed.discoName,
+        companyName: parsed.companyName,
         fcAdjustmentPerUnit: fcPerUnit,
         qtaPerUnit: qtaPerUnit,
       );
@@ -79,7 +79,7 @@ class BillRepositoryImpl implements BillRepository {
         overchargeAmount: validation.difference.clamp(0, double.infinity),
         imagePath: imagePath,
         // Box 1
-        discoName: parsed.discoName,
+        companyName: parsed.companyName,
         connectionDate: parsed.connectionDate,
         connectedLoad: parsed.connectedLoad,
         edo: parsed.edo,
@@ -99,7 +99,7 @@ class BillRepositoryImpl implements BillRepository {
         noOfAct: parsed.noOfAct,
         unBillAge: parsed.unBillAge,
         feederName: parsed.feederName,
-        iescoGstNo: parsed.iescoGstNo,
+        companyGstNo: parsed.companyGstNo,
         // Box 3
         name: parsed.name,
         sonOf: parsed.sonOf,
@@ -172,7 +172,7 @@ class BillRepositoryImpl implements BillRepository {
         isOvercharged: bill.isOvercharged,
         overchargeAmount: bill.overchargeAmount,
         imagePath: bill.imagePath,
-        discoName: bill.discoName,
+        companyName: bill.companyName,
         connectionDate: bill.connectionDate,
         connectedLoad: bill.connectedLoad,
         edo: bill.edo,
@@ -191,7 +191,7 @@ class BillRepositoryImpl implements BillRepository {
         noOfAct: bill.noOfAct,
         unBillAge: bill.unBillAge,
         feederName: bill.feederName,
-        iescoGstNo: bill.iescoGstNo,
+        companyGstNo: bill.companyGstNo,
         name: bill.name,
         sonOf: bill.sonOf,
         plotNo: bill.plotNo,

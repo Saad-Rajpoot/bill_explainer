@@ -21,7 +21,7 @@ class BillModel {
 
   // ── BOX 1: Connection Info ─────────────────────────────────────────
   @Index()
-  late String discoName;
+  late String companyName;
   String? connectionDate;
   String? connectedLoad;
   String? edo;
@@ -44,7 +44,7 @@ class BillModel {
   String? noOfAct;
   String? unBillAge;
   String? feederName;
-  String? iescoGstNo;
+  String? companyGstNo;
 
   // ── BOX 3: Name & Address ──────────────────────────────────────────
   String? name;
@@ -62,7 +62,7 @@ class BillModel {
   late int unitsConsumed;
   String? status;
 
-  // ── BOX 6: IESCO Charges ───────────────────────────────────────────
+  // ── BOX 6: Company Charges ────────────────────────────────────────
   double? costOfElectricity;
   double? meterRentFixCharges;
   double? serviceRent;
@@ -123,7 +123,7 @@ class BillModel {
         ..bill = h.bill
         ..payment = h.payment).toList()
       // Box 1
-      ..discoName = bill.discoName
+      ..companyName = bill.companyName
       ..connectionDate = bill.connectionDate
       ..connectedLoad = bill.connectedLoad
       ..edo = bill.edo
@@ -143,7 +143,7 @@ class BillModel {
       ..noOfAct = bill.noOfAct
       ..unBillAge = bill.unBillAge
       ..feederName = bill.feederName
-      ..iescoGstNo = bill.iescoGstNo
+      ..companyGstNo = bill.companyGstNo
       // Box 3
       ..name = bill.name
       ..sonOf = bill.sonOf
@@ -218,7 +218,7 @@ class BillModel {
       expectedAmount: expectedAmount,
       isOvercharged: isOvercharged,
       overchargeAmount: overchargeAmount,
-      discoName: discoName,
+      companyName: companyName,
       connectionDate: connectionDate,
       connectedLoad: connectedLoad,
       edo: edo,
@@ -237,7 +237,7 @@ class BillModel {
       noOfAct: noOfAct,
       unBillAge: unBillAge,
       feederName: feederName,
-      iescoGstNo: iescoGstNo,
+      companyGstNo: companyGstNo,
       name: name,
       sonOf: sonOf,
       plotNo: plotNo,

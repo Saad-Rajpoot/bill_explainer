@@ -42,7 +42,7 @@ class BillExplainBloc extends Bloc<BillExplainEvent, BillExplainState> {
     final text = '''
 بجلی سمجھو — بل تجزیہ
 صارف نمبر: ${bill.consumerNumber}
-بجلی کمپنی: ${bill.discoName}
+بجلی کمپنی: بجلی فراہم کنندہ
 یونٹ: ${bill.unitsConsumed}
 کل رقم: ₨${bill.totalAmount.toStringAsFixed(0)}
 حالت: ${loaded.explanation.overallStatusUrdu}

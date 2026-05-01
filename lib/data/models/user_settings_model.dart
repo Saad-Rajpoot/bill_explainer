@@ -6,7 +6,7 @@ part 'user_settings_model.g.dart';
 class UserSettingsModel {
   Id id = Isar.autoIncrement;
   bool darkMode = false;
-  String discoName = 'LESCO';
+  String companyName = 'LESCO';
   bool isPremium = false;
 
   UserSettingsModel();
@@ -15,7 +15,7 @@ class UserSettingsModel {
     return UserSettingsModel()
       ..id = 1
       ..darkMode = false
-      ..discoName = 'LESCO'
+      ..companyName = 'LESCO'
       ..isPremium = false;
   }
 }

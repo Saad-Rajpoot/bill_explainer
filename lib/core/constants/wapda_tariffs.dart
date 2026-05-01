@@ -6,7 +6,7 @@
 ///
 /// Slab structure: {minUnits, maxUnits, ratePerUnit (PKR)}
 abstract class WapdaTariffs {
-  // ─── DISCO identifiers ────────────────────────────────────────────
+  // ─── Company identifiers ──────────────────────────────────────────
   static const String lesco = 'LESCO';
   static const String mepco = 'MEPCO';
   static const String fesco = 'FESCO';
@@ -16,7 +16,7 @@ abstract class WapdaTariffs {
   static const String sepco = 'SEPCO';
   static const String qesco = 'QESCO';
 
-  static const List<String> allDiscos = [
+  static const List<String> allCompanies = [
     lesco,
     mepco,
     fesco,
@@ -27,8 +27,8 @@ abstract class WapdaTariffs {
     qesco,
   ];
 
-  /// DISCO display names in Urdu
-  static const Map<String, String> discoUrduNames = {
+  /// Company display names in Urdu
+  static const Map<String, String> companyUrduNames = {
     lesco: 'لاہور الیکٹرک سپلائی کمپنی',
     mepco: 'ملتان الیکٹرک پاور کمپنی',
     fesco: 'فیصل آباد الیکٹرک سپلائی کمپنی',
@@ -39,8 +39,8 @@ abstract class WapdaTariffs {
     qesco: 'کوئٹہ الیکٹرک سپلائی کمپنی',
   };
 
-  /// DISCO service areas in Urdu
-  static const Map<String, String> discoAreas = {
+  /// Company service areas in Urdu
+  static const Map<String, String> companyAreas = {
     lesco: 'لاہور، شیخوپورہ، ننکانہ صاحب',
     mepco: 'ملتان، بہاولپور، سرگودھا',
     fesco: 'فیصل آباد، جھنگ، ٹوبہ ٹیک سنگھ',
@@ -51,8 +51,8 @@ abstract class WapdaTariffs {
     qesco: 'کوئٹہ، بلوچستان',
   };
 
-  /// Helpline numbers for each DISCO
-  static const Map<String, String> discoHelplines = {
+  /// Helpline numbers for each Company
+  static const Map<String, String> companyHelplines = {
     lesco: '118',
     mepco: '118',
     fesco: '118',
@@ -126,9 +126,9 @@ abstract class WapdaTariffs {
   static const double qtaDefault = 0.0; // Fetched from Supabase in production
 
   // ─── PESCO / HESCO / SEPCO / QESCO special rates ─────────────────
-  // These DISCOs may have slight variations approved by NEPRA.
-  // For now, residential slabs are uniform across all DISCOs.
-  // TODO: Add disco-specific commercial/agricultural tariffs.
+  // These companies may have slight variations approved by NEPRA.
+  // For now, residential slabs are uniform across all companies.
+  // TODO: Add company-specific commercial/agricultural tariffs.
 }
 
 /// Represents a single tariff slab.

@@ -19,7 +19,7 @@ class ExplainBillParams {
 /// Business rules live here — NOT in BLoC.
 /// - Determines charge status (normal/high/overcharged)
 /// - Generates Urdu complaint text if needed
-/// - Resolves helpline number for DISCO
+/// - Resolves helpline number for Company
 class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> {
   final BillRepository repository;
   ExplainBillUseCase(this.repository);
@@ -35,7 +35,7 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
 
   BillExplanation _buildExplanation(Bill bill) {
     final charges = _buildCharges(bill);
-    final helpline = WapdaTariffs.discoHelplines[bill.discoName] ?? '118';
+    final helpline = WapdaTariffs.companyHelplines[bill.companyName] ?? '118';
 
     String? complaintText;
     if (bill.isOvercharged) {
@@ -63,7 +63,7 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
     // Re-calculate expected values for each charge
     final tariff = TariffCalculator.calculate(
       units: bill.unitsConsumed,
-      discoName: bill.discoName,
+      companyName: bill.companyName,
     );
 
     return [
