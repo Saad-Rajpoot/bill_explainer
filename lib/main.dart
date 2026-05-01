@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -14,6 +11,8 @@ import 'data/datasources/local/bill_local_datasource.dart';
 import 'injection_container.dart';
 import 'language/language_provider.dart';
 import 'package:provider/provider.dart';
+import 'presentation/blocs/bill_history/bill_history_bloc.dart';
+import 'presentation/blocs/bill_history/bill_history_bloc_impl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,8 +46,13 @@ Future<void> main() async {
   }());
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => LanguageProvider()..loadSavedLanguage(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()..loadSavedLanguage()),
+        BlocProvider<BillHistoryBlocImpl>.value(
+          value: sl<BillHistoryBlocImpl>()..add(const BillHistoryLoadRequested()),
+        ),
+      ],
       child: const BijliSamjhoApp(),
     ),
   );
@@ -249,15 +253,10 @@ class _AppBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    // ignore: avoid_print
-    print('[BLoC] ${bloc.runtimeType}: ${transition.currentState.runtimeType}'
-        ' → ${transition.nextState.runtimeType}');
   }
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    // ignore: avoid_print
-    print('[BLoC ERROR] ${bloc.runtimeType}: $error');
     super.onError(bloc, error, stackTrace);
   }
 }

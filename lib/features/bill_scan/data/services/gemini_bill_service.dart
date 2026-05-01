@@ -33,9 +33,9 @@ IMPORTANT RULES:
 - Even if two fields look similar (e.g., "Load" and "Connected Load"), treat them as SEPARATE fields with their own values
 - If a field is present but has no value, write null
 - Do NOT skip any field or box
-- Maintain the exact box/section structure as it appears on the bill
-- IMPORTANT: The field is "EDO", do NOT output "ED@" even if it looks like an @ symbol.
+- IF THE IMAGE IS TOO BLURRY, UNREADABLE, OR NOT AN ELECTRICITY BILL, return EXACTLY this JSON: {"error": "IMAGE_QUALITY_OR_INVALID"}
 - Return the result strictly in JSON format
+- IMPORTANT: The field is "EDO", do NOT output "ED@" even if it looks like an @ symbol.
 
 Extract the data in the following JSON structure:
 
@@ -147,11 +147,11 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
             .replaceAll('```json', '')
             .replaceAll('```', '')
             .trim();
-
+        final Map<String, dynamic> jsonMap = jsonDecode(cleanJson);
+        return _mapJsonToParsedBill(jsonMap);
       }
       return null;
     } catch (e) {
-      print('Gemini SDK Error: $e');
       return null;
     }
   }

@@ -79,7 +79,7 @@ class ChargeCardWidget extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(charge.nameUrdu,
+                                Text(lp.translate(charge.nameKey),
                                     textAlign: TextAlign.right,
                                     style: const TextStyle(
                                         fontFamily: 'NotoNastaliqUrdu',
@@ -101,7 +101,7 @@ class ChargeCardWidget extends StatelessWidget {
                             children: [
                               const Divider(height: 24),
                               Text(
-                                charge.explanationUrdu,
+                                lp.translate(charge.explanationKey),
                                 textAlign: TextAlign.right,
                                 style: const TextStyle(
                                     fontFamily: 'NotoNastaliqUrdu',

@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
-import '../../../core/constants/app_strings.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/urdu_formatter.dart';
 import '../../../domain/entities/bill.dart';
@@ -39,10 +38,15 @@ class _ExplainView extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: BlocBuilder<BillExplainBloc, BillExplainState>(
         builder: (context, state) {
-          if (state is BillExplainLoading) return _LoadingView();
-          if (state is BillExplainFailure)
+          if (state is BillExplainLoading) {
+            return _LoadingView();
+          }
+          if (state is BillExplainFailure) {
             return _FailView(msg: state.messageUrdu);
-          if (state is BillExplainLoaded) return _LoadedView(state: state);
+          }
+          if (state is BillExplainLoaded) {
+            return _LoadedView(state: state);
+          }
           return _LoadingView();
         },
       ),
@@ -866,26 +870,31 @@ class _Row extends StatelessWidget {
               : CrossAxisAlignment.end,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
+                  flex: 3,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (explanation != null) ...[
-                        Icon(Icons.info_outline_rounded,
-                            size: 14,
-                            color: AppColors.primary.withOpacity(0.5)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(Icons.info_outline_rounded,
+                              size: 14,
+                              color: AppColors.primary.withOpacity(0.5)),
+                        ),
                         const SizedBox(width: 6),
                       ],
-                      Flexible(
+                      Expanded(
                         child: Text(label,
-                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 fontFamily: lp.currentLanguageCode == 'ur'
                                     ? 'NotoNastaliqUrdu'
                                     : 'Roboto',
                                 color: AppColors.textSecondary,
                                 fontSize: 14,
+                                height: 1.4,
                                 fontWeight: isTotal
                                     ? FontWeight.w900
                                     : FontWeight.w500)),
@@ -893,19 +902,22 @@ class _Row extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 16),
-                Flexible(
-                    child: Text(displayValue,
-                        textAlign: lp.currentLanguageCode == 'ur'
-                            ? TextAlign.left
-                            : TextAlign.right,
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w900,
-                            fontSize: isTotal ? 18 : 15,
-                            color: isTotal
-                                ? AppColors.primary
-                                : AppColors.textPrimary))),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: Text(displayValue,
+                      textAlign: lp.currentLanguageCode == 'ur'
+                          ? TextAlign.left
+                          : TextAlign.right,
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.w900,
+                          fontSize: isTotal ? 17 : 14,
+                          height: 1.4,
+                          color: isTotal
+                              ? AppColors.primary
+                              : AppColors.textPrimary)),
+                ),
               ],
             ),
             if (isTotal)

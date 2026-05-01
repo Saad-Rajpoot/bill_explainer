@@ -23,10 +23,7 @@ class _CompareBillsPageState extends State<CompareBillsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<BillHistoryBlocImpl>()
-        ..add(const BillHistoryLoadRequested()),
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
           title: Text(Provider.of<LanguageProvider>(context).translate('compareTitle')),
@@ -101,8 +98,7 @@ class _CompareBillsPageState extends State<CompareBillsPage> {
             return const SizedBox.shrink();
           },
         ),
-      ),
-    );
+      ),;
   }
 }
 

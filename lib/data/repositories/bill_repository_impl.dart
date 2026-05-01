@@ -1,5 +1,8 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 import '../../domain/entities/bill.dart';
 import '../../domain/entities/bill_charge.dart';
 import '../../domain/repositories/bill_repository.dart';
@@ -29,9 +32,28 @@ class BillRepositoryImpl implements BillRepository {
 
   @override
   Future<Either<Failure, Bill>> scanBill(String imagePath) async {
+    // 0. Offline Guard
+    if (!await networkInfo.isConnected) {
+      return const Left(NetworkFailure(message: 'انٹرنیٹ کنکشن دستیاب نہیں ہے'));
+    }
+
     try {
-      // 1. Parse via Gemini AI (Local OCR removed)
-      final imageFile = File(imagePath);
+      // 0.5 Compress Image
+      final dir = await getTemporaryDirectory();
+      final targetPath = p.join(dir.path, "${DateTime.now().millisecondsSinceEpoch}.jpg");
+      
+      final compressedFile = await FlutterImageCompress.compressAndGetFile(
+        imagePath,
+        targetPath,
+        quality: 70,
+        minWidth: 1024,
+        minHeight: 1024,
+      );
+
+      if (compressedFile == null) return const Left(UnexpectedFailure());
+
+      // 1. Parse via Gemini AI
+      final imageFile = File(compressedFile.path);
       final parsed = await hybridExtractor.extractBill(imageFile);
 
       if (parsed == null || (!parsed.hasMinimumData && parsed.unitsConsumed == null)) {
@@ -435,37 +457,69 @@ class BillRepositoryImpl implements BillRepository {
     );
   }
 
-  /// Parse "MAR 23" → DateTime
+  /// Robust parsing for "MAR 23", "03/23", etc.
   DateTime? _parseMonthYear(String? raw) {
     if (raw == null || raw.isEmpty) return null;
     const months = {
       'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6,
       'JUL': 7, 'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12,
     };
-    final parts = raw.trim().toUpperCase().split(RegExp(r'[\s/-]+'));
-    if (parts.length < 2) return null;
-    final month = months[parts[0]];
-    final yearStr = parts[1].length == 2 ? '20${parts[1]}' : parts[1];
-    final year = int.tryParse(yearStr);
-    if (month == null || year == null) return null;
-    return DateTime(year, month);
+    final normalized = raw.trim().toUpperCase();
+
+    // 1. Try "MAR 23" (Alphanumeric)
+    final alphaMatch = RegExp(r'([A-Z]{3})[\s/-]+(\d{2,4})').firstMatch(normalized);
+    if (alphaMatch != null) {
+      final month = months[alphaMatch.group(1)];
+      final yearStr = alphaMatch.group(2)!;
+      final year = int.tryParse(yearStr.length == 2 ? '20$yearStr' : yearStr);
+      if (month != null && year != null) return DateTime(year, month);
+    }
+
+    // 2. Try "03/23" (Numeric)
+    final numericMatch = RegExp(r'(\d{1,2})[\s/-]+(\d{2,4})').firstMatch(normalized);
+    if (numericMatch != null) {
+      final month = int.tryParse(numericMatch.group(1)!);
+      final yearStr = numericMatch.group(2)!;
+      final year = int.tryParse(yearStr.length == 2 ? '20$yearStr' : yearStr);
+      if (month != null && month >= 1 && month <= 12 && year != null) {
+        return DateTime(year, month);
+      }
+    }
+    return null;
   }
 
-  /// Parse "13 APR 23" → DateTime
+  /// Robust parsing for "13 APR 23", "13/04/23", etc.
   DateTime? _parseDayMonthYear(String? raw) {
     if (raw == null || raw.isEmpty) return null;
     const months = {
       'JAN': 1, 'FEB': 2, 'MAR': 3, 'APR': 4, 'MAY': 5, 'JUN': 6,
       'JUL': 7, 'AUG': 8, 'SEP': 9, 'OCT': 10, 'NOV': 11, 'DEC': 12,
     };
-    final parts = raw.trim().toUpperCase().split(RegExp(r'[\s/-]+'));
-    if (parts.length < 3) return null;
-    final day = int.tryParse(parts[0]);
-    final month = months[parts[1]];
-    final yearStr = parts[2].length == 2 ? '20${parts[2]}' : parts[2];
-    final year = int.tryParse(yearStr);
-    if (day == null || month == null || year == null) return null;
-    return DateTime(year, month, day);
+    final normalized = raw.trim().toUpperCase();
+
+    // 1. Try "13 APR 23"
+    final alphaMatch = RegExp(r'(\d{1,2})[\s/-]+([A-Z]{3})[\s/-]+(\d{2,4})').firstMatch(normalized);
+    if (alphaMatch != null) {
+      final day = int.tryParse(alphaMatch.group(1)!);
+      final month = months[alphaMatch.group(2)];
+      final yearStr = alphaMatch.group(3)!;
+      final year = int.tryParse(yearStr.length == 2 ? '20$yearStr' : yearStr);
+      if (day != null && month != null && year != null) return DateTime(year, month, day);
+    }
+
+    // 2. Try "13/04/23" (Numeric)
+    final numericMatch = RegExp(r'(\d{1,2})[\s/-]+(\d{1,2})[\s/-]+(\d{2,4})').firstMatch(normalized);
+    if (numericMatch != null) {
+      final d1 = int.tryParse(numericMatch.group(1)!);
+      final d2 = int.tryParse(numericMatch.group(2)!);
+      final yearStr = numericMatch.group(3)!;
+      final year = int.tryParse(yearStr.length == 2 ? '20$yearStr' : yearStr);
+      if (d1 != null && d2 != null && year != null) {
+        if (d1 <= 31 && d2 <= 12) return DateTime(year, d2, d1); // dd/mm
+        if (d1 <= 12 && d2 <= 31) return DateTime(year, d1, d2); // mm/dd
+      }
+    }
+    return null;
   }
 
   String _buildComparisonAnalysis(

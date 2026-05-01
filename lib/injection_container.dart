@@ -28,7 +28,12 @@ final GetIt sl = GetIt.instance;
 Future<void> initDependencies(Isar isar) async {
   // ─── External ─────────────────────────────────────────────────────
   sl.registerLazySingleton<Connectivity>(() => Connectivity());
-  sl.registerLazySingleton<Dio>(() => Dio());
+  sl.registerLazySingleton<Dio>(() => Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 15),
+          receiveTimeout: const Duration(seconds: 30),
+        ),
+      ));
   sl.registerLazySingleton<FlutterSecureStorage>(
       () => const FlutterSecureStorage());
 
@@ -69,6 +74,13 @@ Future<void> initDependencies(Isar isar) async {
   sl.registerLazySingleton(() => CompareBillsUseCase(sl<BillRepository>()));
 
   // ─── BLoCs (factory — new instance per screen) ────────────────────
+  sl.registerSingleton<BillHistoryBlocImpl>(
+    BillHistoryBlocImpl(
+      getBillHistoryUseCase: sl<GetBillHistoryUseCase>(),
+      billRepository: sl<BillRepository>(),
+    ),
+  );
+
   sl.registerFactory(
     () => BillScanBloc(
       scanBillUseCase: sl<ScanBillUseCase>(),
@@ -77,11 +89,5 @@ Future<void> initDependencies(Isar isar) async {
   );
   sl.registerFactory(
     () => BillExplainBloc(explainBillUseCase: sl<ExplainBillUseCase>()),
-  );
-  sl.registerFactory<BillHistoryBlocImpl>(
-    () => BillHistoryBlocImpl(
-      getBillHistoryUseCase: sl<GetBillHistoryUseCase>(),
-      billRepository: sl<BillRepository>(),
-    ),
   );
 }

@@ -7,7 +7,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../language/language_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../core/router/app_router.dart';
-import '../../../injection_container.dart';
 import '../../blocs/bill_history/bill_history_bloc.dart';
 import '../../blocs/bill_history/bill_history_bloc_impl.dart';
 import '../../widgets/language_bottom_sheet.dart';
@@ -20,13 +19,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<BillHistoryBlocImpl>()
-          ..add(const BillHistoryLoadRequested())),
-      ],
-      child: const _HomeView(),
-    );
+    return const _HomeView();
   }
 }
 
