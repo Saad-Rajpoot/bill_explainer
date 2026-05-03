@@ -1,4 +1,4 @@
-package com.example.bill_explainer
+package com.dev.bill_explainer
 
 import io.flutter.embedding.android.FlutterActivity
 

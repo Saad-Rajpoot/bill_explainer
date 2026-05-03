@@ -6,28 +6,19 @@
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
 
-# Google Generative AI (Gemini)
--keep class com.google.generativeai.** { *; }
-
-# Isar Database
+# Isar database
 -keep class io.isar.** { *; }
--keep class * extends io.isar.IsarCollection { *; }
--keep class * extends io.isar.IsarLinks { *; }
 
-# SharedPreferences
--keep class com.google.gson.** { *; }
+# Google ML Kit
+-keep class com.google.mlkit.** { *; }
+-keep class com.google.android.gms.** { *; }
 
-# Image Picker & Cropper
+# Image Cropper (uCrop)
 -keep class com.yalantis.ucrop.** { *; }
--keep class com.image_picker.** { *; }
 
-# OkHttp
--keep class okhttp3.** { *; }
--keep interface okhttp3.** { *; }
-# ProGuard Warning Suppression
--ignorewarnings
--dontwarn okhttp3.**
--dontwarn okio.**
--dontwarn com.google.common.**
--dontwarn org.checkerframework.**
--dontwarn javax.annotation.**
+# General optimizations
+-dontwarn io.flutter.embedding.android.FlutterActivity
+-dontwarn io.flutter.embedding.android.FlutterFragment
+-dontwarn io.flutter.embedding.engine.plugins.FlutterPlugin
+-dontwarn io.flutter.plugin.common.MethodCodec
+-dontwarn io.flutter.plugin.common.StandardMethodCodec

@@ -117,11 +117,13 @@ class BillModel {
       ..expectedAmount = bill.expectedAmount
       ..isHighBill = bill.isHighBill
       ..differenceAmount = bill.differenceAmount
-      ..paymentHistory = bill.paymentHistory.map((h) => PaymentHistoryModel()
-        ..month = h.month
-        ..units = h.units
-        ..bill = h.bill
-        ..payment = h.payment).toList()
+      ..paymentHistory = bill.paymentHistory
+          .map((h) => PaymentHistoryModel()
+            ..month = h.month
+            ..units = h.units
+            ..bill = h.bill
+            ..payment = h.payment)
+          .toList()
       // Box 1
       ..companyName = bill.companyName
       ..connectionDate = bill.connectionDate
@@ -209,12 +211,14 @@ class BillModel {
       scannedAt: scannedAt,
       ocrConfidence: ocrConfidence,
       charges: _buildCharges(),
-      paymentHistory: paymentHistory.map((h) => PaymentHistoryEntry(
-        month: h.month ?? '',
-        units: h.units ?? '',
-        bill: h.bill ?? 0.0,
-        payment: h.payment ?? 0.0,
-      )).toList(),
+      paymentHistory: paymentHistory
+          .map((h) => PaymentHistoryEntry(
+                month: h.month ?? '',
+                units: h.units ?? '',
+                bill: h.bill ?? 0.0,
+                payment: h.payment ?? 0.0,
+              ))
+          .toList(),
       expectedAmount: expectedAmount,
       isHighBill: isHighBill,
       differenceAmount: differenceAmount,
@@ -297,16 +301,12 @@ class BillModel {
         _charge('meter_rent_fix_charges', meterRentFixCharges!),
       if ((fuelPriceAdjustment ?? 0) > 0)
         _charge('fuel_price_adjustment', fuelPriceAdjustment!),
-      if ((fcSurcharge ?? 0) > 0)
-        _charge('fc_surcharge', fcSurcharge!),
-      if ((qtrTariffAdj ?? 0) > 0)
-        _charge('qtr_tariff_adj', qtrTariffAdj!),
+      if ((fcSurcharge ?? 0) > 0) _charge('fc_surcharge', fcSurcharge!),
+      if ((qtrTariffAdj ?? 0) > 0) _charge('qtr_tariff_adj', qtrTariffAdj!),
       if ((electricityDuty ?? 0) > 0)
         _charge('electricity_duty', electricityDuty!),
-      if ((gst ?? 0) > 0)
-        _charge('gst', gst!),
-      if ((tvFee ?? 0) > 0)
-        _charge('tv_fee', tvFee!),
+      if ((gst ?? 0) > 0) _charge('gst', gst!),
+      if ((tvFee ?? 0) > 0) _charge('tv_fee', tvFee!),
     ];
   }
 
