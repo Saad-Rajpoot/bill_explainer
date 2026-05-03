@@ -24,6 +24,10 @@
 # OkHttp
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
+# ProGuard Warning Suppression
+-ignorewarnings
 -dontwarn okhttp3.**
--keep class okio.** { *; }
 -dontwarn okio.**
+-dontwarn com.google.common.**
+-dontwarn org.checkerframework.**
+-dontwarn javax.annotation.**

@@ -158,28 +158,20 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
 
   double? _amt(dynamic v) {
     if (v == null) return null;
-    final s = v.toString();
-    // Use regex to find all numbers (including decimals)
-    final numbers = RegExp(r'\d+\.?\d*').allMatches(s)
-        .map((m) => double.tryParse(m.group(0) ?? '0') ?? 0.0)
-        .toList();
-    
-    if (numbers.isEmpty) return null;
-    // Sum all found numbers
-    return numbers.reduce((a, b) => a + b);
+    // Remove commas and extract the first valid decimal number
+    final s = v.toString().replaceAll(',', '').trim();
+    final match = RegExp(r'\d+\.?\d*').firstMatch(s);
+    if (match == null) return null;
+    return double.tryParse(match.group(0)!) ?? 0.0;
   }
 
   int? _int(dynamic v) {
     if (v == null) return null;
-    final s = v.toString();
-    // Use regex to find all whole numbers
-    final numbers = RegExp(r'\d+').allMatches(s)
-        .map((m) => int.tryParse(m.group(0) ?? '0') ?? 0)
-        .toList();
-    
-    if (numbers.isEmpty) return null;
-    // Sum all found numbers
-    return numbers.reduce((a, b) => a + b);
+    // Remove commas and extract the first valid integer
+    final s = v.toString().replaceAll(',', '').trim();
+    final match = RegExp(r'\d+').firstMatch(s);
+    if (match == null) return null;
+    return int.tryParse(match.group(0)!) ?? 0;
   }
 
   String? _str(dynamic v) {
@@ -200,93 +192,95 @@ Now extract all values from the bill image and return the fully filled JSON. Do 
     final b9 = json['box_9_bill_calculation'] as Map<String, dynamic>? ?? {};
     final b10 = json['box_10_contact_info'] as Map<String, dynamic>? ?? {};
 
-    final List<PaymentHistoryEntry> history = b4.map((h) => PaymentHistoryEntry(
-      month: _str(h['MONTH']) ?? '',
-      units: _str(h['UNITS']) ?? '',
-      bill: _amt(h['BILL']) ?? 0,
-      payment: _amt(h['PAYMENT']) ?? 0,
-    )).toList();
+    final List<PaymentHistoryEntry> history = b4
+        .map((h) => PaymentHistoryEntry(
+              month: _str(h['MONTH']) ?? '',
+              units: _str(h['UNITS']) ?? '',
+              bill: _amt(h['BILL']) ?? 0,
+              payment: _amt(h['PAYMENT']) ?? 0,
+            ))
+        .toList();
 
     return ParsedBill(
       companyName: _str(b1['COMPANY NAME']) ?? _str(b1['DISCO']) ?? 'Company',
       paymentHistory: history,
       // BOX 1
-      connectionDate:  _str(b1['CONNECTION DATE']),
-      connectedLoad:   _str(b1['CONNECTED LOAD']),
-      edo:             _str(b1['EDO']) ?? _str(b1['ED@']),
-      billMonthRaw:    _str(b1['BILL MONTH']),
-      readingDate:     _str(b1['READING DATE']),
-      issueDate:       _str(b1['ISSUE DATE']),
-      dueDateRaw:      _str(b1['DUE DATE']),
+      connectionDate: _str(b1['CONNECTION DATE']),
+      connectedLoad: _str(b1['CONNECTED LOAD']),
+      edo: _str(b1['EDO']) ?? _str(b1['ED@']),
+      billMonthRaw: _str(b1['BILL MONTH']),
+      readingDate: _str(b1['READING DATE']),
+      issueDate: _str(b1['ISSUE DATE']),
+      dueDateRaw: _str(b1['DUE DATE']),
       // BOX 2
-      consumerNumber:  _str(b2['CONSUMER ID']),
-      tariff:          _str(b2['TARIFF']),
-      load:            _amt(b2['LOAD']),
+      consumerNumber: _str(b2['CONSUMER ID']),
+      tariff: _str(b2['TARIFF']),
+      load: _amt(b2['LOAD']),
       oldAccountNumber: _str(b2['OLD A/C NUMBER']),
-      division:        _str(b2['DIVISION']),
-      subDivision:     _str(b2['SUB DIVISION']),
+      division: _str(b2['DIVISION']),
+      subDivision: _str(b2['SUB DIVISION']),
       referenceNumber: _str(b2['REFERENCE NO']),
-      lockAge:         _str(b2['LOCK AGE']),
-      noOfAct:         _str(b2['NO OF ACT']),
-      unBillAge:       _str(b2['UN-BILL-AGE']),
-      feederName:      _str(b2['FEEDER NAME']),
-      companyGstNo:    _str(b2['COMPANY GST NO']) ?? _str(b2['IESCO GST NO']),
+      lockAge: _str(b2['LOCK AGE']),
+      noOfAct: _str(b2['NO OF ACT']),
+      unBillAge: _str(b2['UN-BILL-AGE']),
+      feederName: _str(b2['FEEDER NAME']),
+      companyGstNo: _str(b2['COMPANY GST NO']) ?? _str(b2['IESCO GST NO']),
       // BOX 3
-      name:            _str(b3['NAME']),
-      sonOf:           _str(b3['S/O']),
-      plotNo:          _str(b3['PLOT NO']),
-      stNo:            _str(b3['ST NO']),
-      block:           _str(b3['BLOCK']),
-      area:            _str(b3['AREA']),
+      name: _str(b3['NAME']),
+      sonOf: _str(b3['S/O']),
+      plotNo: _str(b3['PLOT NO']),
+      stNo: _str(b3['ST NO']),
+      block: _str(b3['BLOCK']),
+      area: _str(b3['AREA']),
       // BOX 5
-      meterNo:         _str(b5['METER NO']),
+      meterNo: _str(b5['METER NO']),
       previousReading: _int(b5['PREVIOUS READING']),
-      presentReading:  _int(b5['PRESENT READING']),
-      mf:              _int(b5['MF']) ?? 1,
-      unitsConsumed:   _int(b5['UNITS']),
-      status:          _str(b5['STATUS']),
+      presentReading: _int(b5['PRESENT READING']),
+      mf: _int(b5['MF']) ?? 1,
+      unitsConsumed: _int(b5['UNITS']),
+      status: _str(b5['STATUS']),
       // BOX 6
       unitsConsumedB6: _str(b6['UNITS CONSUMED']),
-      costOfElectricity:      _amt(b6['COST OF ELECTRICITY']),
-      meterRentFixCharges:    _amt(b6['METER RENT FIX CHARGES']),
-      serviceRent:            _amt(b6['SERVICE RENT']),
-      fuelPriceAdjustment:    _amt(b6['FUEL PRICE ADJUSTMENT']),
-      fcSurcharge:            _amt(b6['F.C SURCHARGE']),
-      qtrTariffAdj:           _amt(b6['QTR TARIFF ADJ/DMC']),
+      costOfElectricity: _amt(b6['COST OF ELECTRICITY']),
+      meterRentFixCharges: _amt(b6['METER RENT FIX CHARGES']),
+      serviceRent: _amt(b6['SERVICE RENT']),
+      fuelPriceAdjustment: _amt(b6['FUEL PRICE ADJUSTMENT']),
+      fcSurcharge: _amt(b6['F.C SURCHARGE']),
+      qtrTariffAdj: _amt(b6['QTR TARIFF ADJ/DMC']),
       // BOX 7
-      electricityDuty:   _amt(b7['ELECTRICITY DUTY']),
-      tvFee:             _amt(b7['TV FEE']),
-      gst:               _amt(b7['GST']),
-      incomeTax:         _amt(b7['INCOME TAX']),
-      extraTax:          _amt(b7['EXTRA TAX']),
-      furtherTax:        _amt(b7['FURTHER TAX']),
-      retailerStax:      _amt(b7['RETAILER STAX']),
-      gstOnFpa:          _amt(b7['GST ON FPA']),
-      edOnFpa:           _amt(b7['ED ON FPA']),
-      furtherTaxOnFpa:   _amt(b7['FURTHER TAX ON FPA']),
-      sTaxOnFpa:         _amt(b7['S.TAX ON FPA']),
-      itOnFpa:           _amt(b7['IT ON FPA']),
-      etOnFpa:           _amt(b7['ET ON FPA']),
-      totalTaxesOnFpa:   _amt(b7['TOTAL TAXES ON FPA']),
+      electricityDuty: _amt(b7['ELECTRICITY DUTY']),
+      tvFee: _amt(b7['TV FEE']),
+      gst: _amt(b7['GST']),
+      incomeTax: _amt(b7['INCOME TAX']),
+      extraTax: _amt(b7['EXTRA TAX']),
+      furtherTax: _amt(b7['FURTHER TAX']),
+      retailerStax: _amt(b7['RETAILER STAX']),
+      gstOnFpa: _amt(b7['GST ON FPA']),
+      edOnFpa: _amt(b7['ED ON FPA']),
+      furtherTaxOnFpa: _amt(b7['FURTHER TAX ON FPA']),
+      sTaxOnFpa: _amt(b7['S.TAX ON FPA']),
+      itOnFpa: _amt(b7['IT ON FPA']),
+      etOnFpa: _amt(b7['ET ON FPA']),
+      totalTaxesOnFpa: _amt(b7['TOTAL TAXES ON FPA']),
       // BOX 8
-      arrears:              _amt(b8['ARREAR/AGE']),
-      currentBill:          _amt(b8['CURRENT BILL']),
-      billAdjustment:       _amt(b8['BILL ADJUSTMENT']),
-      installment:          _amt(b8['INSTALLEMENT']),
-      subsidies:            _amt(b8['SUBSIDIES']),
-      totalFpa:             _amt(b8['TOTAL FPA']),
-      totalAmount:          _amt(b8['PAYABLE WITHIN DUE DATE']),
-      lpSurcharge:          _amt(b8['L.P.SURCHARGE']),
-      payableAfterDueDate:  _str(b8['PAYABLE AFTER DUE DATE']),
+      arrears: _amt(b8['ARREAR/AGE']),
+      currentBill: _amt(b8['CURRENT BILL']),
+      billAdjustment: _amt(b8['BILL ADJUSTMENT']),
+      installment: _amt(b8['INSTALLEMENT']),
+      subsidies: _amt(b8['SUBSIDIES']),
+      totalFpa: _amt(b8['TOTAL FPA']),
+      totalAmount: _amt(b8['PAYABLE WITHIN DUE DATE']),
+      lpSurcharge: _amt(b8['L.P.SURCHARGE']),
+      payableAfterDueDate: _str(b8['PAYABLE AFTER DUE DATE']),
       // BOX 9
-      gopTariff:    _amt(b9['GOP TARIFF']),
-      calculation:  _str(b9['CALCULATION (GOP TARIFF x UNITS)']),
+      gopTariff: _amt(b9['GOP TARIFF']),
+      calculation: _str(b9['CALCULATION (GOP TARIFF x UNITS)']),
       // BOX 10
       textReferenceTo: _str(b10['TEXT REFERENCE NO TO']),
-      orCall:          _str(b10['OR CALL']),
-      centerName:      _str(b10['CENTER NAME']),
-      complaintsDial:  _str(b10['FOR COMPLAINTS DIAL']),
-      sms:             _str(b10['SMS']),
+      orCall: _str(b10['OR CALL']),
+      centerName: _str(b10['CENTER NAME']),
+      complaintsDial: _str(b10['FOR COMPLAINTS DIAL']),
+      sms: _str(b10['SMS']),
     );
   }
 }

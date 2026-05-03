@@ -15,8 +15,8 @@ class BillModel {
   late DateTime scannedAt;
   late double ocrConfidence;
   late double expectedAmount;
-  late bool isOvercharged;
-  late double overchargeAmount;
+  late bool isHighBill;
+  late double differenceAmount;
   List<PaymentHistoryModel> paymentHistory = [];
 
   // ── BOX 1: Connection Info ─────────────────────────────────────────
@@ -115,8 +115,8 @@ class BillModel {
       ..scannedAt = bill.scannedAt
       ..ocrConfidence = bill.ocrConfidence
       ..expectedAmount = bill.expectedAmount
-      ..isOvercharged = bill.isOvercharged
-      ..overchargeAmount = bill.overchargeAmount
+      ..isHighBill = bill.isHighBill
+      ..differenceAmount = bill.differenceAmount
       ..paymentHistory = bill.paymentHistory.map((h) => PaymentHistoryModel()
         ..month = h.month
         ..units = h.units
@@ -216,8 +216,8 @@ class BillModel {
         payment: h.payment ?? 0.0,
       )).toList(),
       expectedAmount: expectedAmount,
-      isOvercharged: isOvercharged,
-      overchargeAmount: overchargeAmount,
+      isHighBill: isHighBill,
+      differenceAmount: differenceAmount,
       companyName: companyName,
       connectionDate: connectionDate,
       connectedLoad: connectedLoad,

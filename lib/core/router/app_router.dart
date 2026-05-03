@@ -45,8 +45,8 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.languageSelection,
       name: 'languageSelection',
       builder: (context, state) => const LanguageSelectionPage(),
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: const LanguageSelectionPage(),
+      pageBuilder: (context, state) => const CustomTransitionPage(
+        child: LanguageSelectionPage(),
         transitionsBuilder: _fadeTransition,
       ),
     ),
@@ -56,8 +56,8 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.onboarding,
       name: 'onboarding',
       builder: (context, state) => const OnboardingPage(),
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: const OnboardingPage(),
+      pageBuilder: (context, state) => const CustomTransitionPage(
+        child: OnboardingPage(),
         transitionsBuilder: _fadeTransition,
       ),
     ),
@@ -67,8 +67,8 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.home,
       name: 'home',
       builder: (context, state) => const HomePage(),
-      pageBuilder: (context, state) => CustomTransitionPage(
-        child: const HomePage(),
+      pageBuilder: (context, state) => const CustomTransitionPage(
+        child: HomePage(),
         transitionsBuilder: _fadeTransition,
       ),
       routes: [
@@ -77,8 +77,8 @@ final GoRouter appRouter = GoRouter(
           path: 'scan',
           name: 'scan',
           builder: (context, state) => const ScanBillPage(),
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ScanBillPage(),
+          pageBuilder: (context, state) => const CustomTransitionPage(
+            child: ScanBillPage(),
             transitionsBuilder: _slideUpTransition,
           ),
         ),

@@ -76,10 +76,16 @@ class BillRepositoryImpl implements BillRepository {
       );
 
       // 4. Validate
+      double? prevBill;
+      if (parsed.paymentHistory.isNotEmpty) {
+        prevBill = parsed.paymentHistory.first.bill;
+      }
+
       final validation = TariffCalculator.validateBill(
         units: parsed.unitsConsumed ?? 0,
         billedAmount: parsed.totalAmount ?? 0.0,
         companyName: parsed.companyName,
+        previousMonthBill: prevBill,
         fcAdjustmentPerUnit: fcPerUnit,
         qtaPerUnit: qtaPerUnit,
       );
@@ -97,8 +103,8 @@ class BillRepositoryImpl implements BillRepository {
         charges: _buildChargesFromParsed(parsed, tariff),
         paymentHistory: parsed.paymentHistory,
         expectedAmount: tariff.grandTotal,
-        isOvercharged: validation.isOvercharged,
-        overchargeAmount: validation.difference.clamp(0, double.infinity),
+        isHighBill: validation.isHigh,
+        differenceAmount: validation.difference.clamp(0, double.infinity),
         imagePath: imagePath,
         // Box 1
         companyName: parsed.companyName,
@@ -191,8 +197,8 @@ class BillRepositoryImpl implements BillRepository {
         charges: bill.charges,
         paymentHistory: bill.paymentHistory,
         expectedAmount: bill.expectedAmount,
-        isOvercharged: bill.isOvercharged,
-        overchargeAmount: bill.overchargeAmount,
+        isHighBill: bill.isHighBill,
+        differenceAmount: bill.differenceAmount,
         imagePath: bill.imagePath,
         companyName: bill.companyName,
         connectionDate: bill.connectionDate,
@@ -274,7 +280,7 @@ class BillRepositoryImpl implements BillRepository {
     } on CacheException catch (e) {
       return Left(CacheFailure(message: e.message));
     } catch (e) {
-      return Left(UnexpectedFailure());
+      return const Left(UnexpectedFailure());
     }
   }
 
@@ -443,17 +449,13 @@ class BillRepositoryImpl implements BillRepository {
   }
 
   BillCharge _makeCharge(String id, double amount, String nameKey, String explanationKey, double expected) {
-    final status = (amount - expected).abs() > (expected * 0.05)
-        ? (amount > expected ? ChargeStatus.overcharged : ChargeStatus.normal)
-        : ChargeStatus.normal;
-
     return BillCharge(
       id: id,
       nameKey: nameKey,
       explanationKey: explanationKey,
       amount: amount,
       expectedAmount: expected,
-      status: status,
+      status: ChargeStatus.normal,
     );
   }
 

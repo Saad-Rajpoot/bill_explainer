@@ -68,7 +68,7 @@ class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
       }
       emit(BillScanAwaitingCrop(imagePath: file.path));
     } catch (e) {
-      emit(BillScanFailure(
+      emit(const BillScanFailure(
         errorMessageUrdu: AppStrings.errorGeneric,
       ));
     }
@@ -92,7 +92,7 @@ class BillScanBloc extends Bloc<BillScanEvent, BillScanState> {
       }
       emit(BillScanAwaitingCrop(imagePath: file.path));
     } catch (e) {
-      emit(BillScanFailure(
+      emit(const BillScanFailure(
         errorMessageUrdu: AppStrings.errorGeneric,
       ));
     }

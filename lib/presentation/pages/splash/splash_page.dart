@@ -73,6 +73,7 @@ class _SplashPageState extends State<SplashPage> {
 
               Text(
                 Provider.of<LanguageProvider>(context).translate('app_title'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 38,
@@ -89,6 +90,7 @@ class _SplashPageState extends State<SplashPage> {
 
               Text(
                 Provider.of<LanguageProvider>(context).translate('app_tagline'),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: Provider.of<LanguageProvider>(context).currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                   fontSize: 16,

@@ -18,9 +18,9 @@ class BillExplanation extends Equatable {
     required this.helplineNumber,
   });
 
-  bool get isOvercharged => bill.isOvercharged;
-  int get overchargedChargesCount =>
-      charges.where((c) => c.isOvercharged).length;
+  bool get isHighBill => bill.isHighBill;
+  int get highChargesCount =>
+      charges.where((c) => c.isHigh).length;
 
   @override
   List<Object?> get props => [bill, charges];

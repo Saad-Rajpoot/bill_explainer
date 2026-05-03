@@ -8,7 +8,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/urdu_formatter.dart';
 import '../../../domain/entities/bill.dart';
-import '../../../injection_container.dart';
 import '../../blocs/bill_history/bill_history_bloc.dart';
 import '../../blocs/bill_history/bill_history_bloc_impl.dart';
 
@@ -98,7 +97,7 @@ class _CompareBillsPageState extends State<CompareBillsPage> {
             return const SizedBox.shrink();
           },
         ),
-      ),;
+    );
   }
 }
 

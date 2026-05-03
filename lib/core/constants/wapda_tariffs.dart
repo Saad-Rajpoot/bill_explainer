@@ -78,20 +78,50 @@ abstract class WapdaTariffs {
   // Slab 8: 701+ units (peak slab)
 
   static const List<TariffSlab> residentialSlabs = [
-    TariffSlab(minUnits: 1, maxUnits: 50, ratePerUnit: 3.95, label: 'محفوظ (۱–۵۰)'),
-    TariffSlab(minUnits: 1, maxUnits: 100, ratePerUnit: 7.74, label: 'سلیب ۱ (۱–۱۰۰)'),
-    TariffSlab(minUnits: 101, maxUnits: 200, ratePerUnit: 10.06, label: 'سلیب ۲ (۱۰۱–۲۰۰)'),
-    TariffSlab(minUnits: 201, maxUnits: 300, ratePerUnit: 17.60, label: 'سلیب ۳ (۲۰۱–۳۰۰)'),
-    TariffSlab(minUnits: 301, maxUnits: 400, ratePerUnit: 21.32, label: 'سلیب ۴ (۳۰۱–۴۰۰)'),
-    TariffSlab(minUnits: 401, maxUnits: 500, ratePerUnit: 24.43, label: 'سلیب ۵ (۴۰۱–۵۰۰)'),
-    TariffSlab(minUnits: 501, maxUnits: 600, ratePerUnit: 26.19, label: 'سلیب ۶ (۵۰۱–۶۰۰)'),
-    TariffSlab(minUnits: 601, maxUnits: 700, ratePerUnit: 27.24, label: 'سلیب ۷ (۶۰۱–۷۰۰)'),
-    TariffSlab(minUnits: 701, maxUnits: 99999, ratePerUnit: 29.89, label: 'سلیب ۸ (۷۰۱+)'),
+    TariffSlab(
+        minUnits: 1, maxUnits: 50, ratePerUnit: 3.95, label: 'محفوظ (۱–۵۰)'),
+    TariffSlab(
+        minUnits: 1, maxUnits: 100, ratePerUnit: 7.74, label: 'سلیب ۱ (۱–۱۰۰)'),
+    TariffSlab(
+        minUnits: 101,
+        maxUnits: 200,
+        ratePerUnit: 10.06,
+        label: 'سلیب ۲ (۱۰۱–۲۰۰)'),
+    TariffSlab(
+        minUnits: 201,
+        maxUnits: 300,
+        ratePerUnit: 17.60,
+        label: 'سلیب ۳ (۲۰۱–۳۰۰)'),
+    TariffSlab(
+        minUnits: 301,
+        maxUnits: 400,
+        ratePerUnit: 21.32,
+        label: 'سلیب ۴ (۳۰۱–۴۰۰)'),
+    TariffSlab(
+        minUnits: 401,
+        maxUnits: 500,
+        ratePerUnit: 24.43,
+        label: 'سلیب ۵ (۴۰۱–۵۰۰)'),
+    TariffSlab(
+        minUnits: 501,
+        maxUnits: 600,
+        ratePerUnit: 26.19,
+        label: 'سلیب ۶ (۵۰۱–۶۰۰)'),
+    TariffSlab(
+        minUnits: 601,
+        maxUnits: 700,
+        ratePerUnit: 27.24,
+        label: 'سلیب ۷ (۶۰۱–۷۰۰)'),
+    TariffSlab(
+        minUnits: 701,
+        maxUnits: 99999,
+        ratePerUnit: 29.89,
+        label: 'سلیب ۸ (۷۰۱+)'),
   ];
 
   // ─── Fixed Charges per Month (PKR) by slab ────────────────────────
   static const Map<int, double> fixedChargesByMaxSlab = {
-    50: 75,    // Protected consumer
+    50: 75, // Protected consumer
     100: 175,
     200: 175,
     300: 250,
@@ -128,7 +158,6 @@ abstract class WapdaTariffs {
   // ─── PESCO / HESCO / SEPCO / QESCO special rates ─────────────────
   // These companies may have slight variations approved by NEPRA.
   // For now, residential slabs are uniform across all companies.
-  // TODO: Add company-specific commercial/agricultural tariffs.
 }
 
 /// Represents a single tariff slab.

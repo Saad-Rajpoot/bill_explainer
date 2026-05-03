@@ -19,12 +19,8 @@ class BillCharge extends Equatable {
     required this.status,
   });
 
-  bool get isOvercharged => status == ChargeStatus.overcharged;
+  bool get isHigh => status == ChargeStatus.high;
   bool get isNormal => status == ChargeStatus.normal;
-  double get overchargeAmount =>
-      (expectedAmount != null && amount > expectedAmount!)
-          ? amount - expectedAmount!
-          : 0.0;
 
   @override
   List<Object?> get props =>

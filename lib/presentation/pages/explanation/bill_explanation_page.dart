@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -62,7 +63,6 @@ class _LoadedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final lp = Provider.of<LanguageProvider>(context);
     final bill = state.explanation.bill;
-    final isOvercharged = bill.isOvercharged;
 
     return CustomScrollView(
       slivers: [
@@ -83,10 +83,8 @@ class _LoadedView extends StatelessWidget {
                   Image.file(File(bill.imagePath!), fit: BoxFit.cover)
                 else
                   Container(
-                    decoration: BoxDecoration(
-                      gradient: isOvercharged
-                          ? AppColors.errorGradient
-                          : AppColors.primaryGradient,
+                    decoration: const BoxDecoration(
+                      gradient: AppColors.primaryGradient,
                     ),
                   ),
                 Container(
@@ -123,17 +121,6 @@ class _LoadedView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1.2)),
                       const SizedBox(height: 8),
-                      Text(lp.translate('settingsCompany'),
-                          style: lp.currentLanguageCode == 'ur'
-                              ? const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)
-                              : GoogleFonts.outfit(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
                       Text(
                           UrduFormatter.pkr(bill.totalAmount,
                               locale: lp.currentLanguageCode),
@@ -157,16 +144,16 @@ class _LoadedView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isOvercharged
-                                  ? Colors.red.withOpacity(0.3)
-                                  : Colors.green.withOpacity(0.3),
+                              color: bill.isHighBill
+                                  ? AppColors.secondary.withOpacity(0.3)
+                                  : AppColors.success.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(color: Colors.white24),
                             ),
                             child: Text(
-                                isOvercharged
+                                bill.isHighBill
                                     ? Provider.of<LanguageProvider>(context)
-                                        .translate('statusOvercharged')
+                                        .translate('statusHigh')
                                     : Provider.of<LanguageProvider>(context)
                                         .translate('statusNormal'),
                                 style: Provider.of<LanguageProvider>(context)
@@ -195,13 +182,7 @@ class _LoadedView extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              if (isOvercharged) ...[
-                _OverchargeAlertCard(bill: bill)
-                    .animate()
-                    .fadeIn()
-                    .slideY(begin: -0.1),
-                const SizedBox(height: 24),
-              ],
+              const SizedBox(height: 12),
 
               _SectionHeader(
                   title: Provider.of<LanguageProvider>(context)
@@ -802,13 +783,11 @@ class _Row extends StatelessWidget {
   final String label;
   final String? value;
   final bool isTotal;
-  final String? explanation;
 
   const _Row(
       {required this.label,
       this.value,
-      this.isTotal = false,
-      this.explanation});
+      this.isTotal = false});
 
   @override
   Widget build(BuildContext context) {
@@ -817,53 +796,8 @@ class _Row extends StatelessWidget {
         ? lp.translate('no_value')
         : value!;
 
-    return InkWell(
-      onTap: explanation == null
-          ? null
-          : () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => Container(
-                  padding: const EdgeInsets.all(32),
-                  decoration: const BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(32)),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: AppColors.divider,
-                              borderRadius: BorderRadius.circular(2))),
-                      const SizedBox(height: 24),
-                      Text(label,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 20,
-                              color: AppColors.primary)),
-                      const SizedBox(height: 16),
-                      Text(explanation!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: lp.currentLanguageCode == 'ur'
-                                  ? 'NotoNastaliqUrdu'
-                                  : 'Roboto',
-                              fontSize: 16,
-                              height: 1.6,
-                              color: AppColors.textPrimary)),
-                      const SizedBox(height: 32),
-                    ],
-                  ),
-                ),
-              );
-            },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           crossAxisAlignment: lp.currentLanguageCode == 'ur'
               ? CrossAxisAlignment.start
@@ -877,15 +811,6 @@ class _Row extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (explanation != null) ...[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Icon(Icons.info_outline_rounded,
-                              size: 14,
-                              color: AppColors.primary.withOpacity(0.5)),
-                        ),
-                        const SizedBox(width: 6),
-                      ],
                       Expanded(
                         child: Text(label,
                             style: TextStyle(
@@ -926,8 +851,7 @@ class _Row extends StatelessWidget {
                   child: Divider(thickness: 1.5)),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -986,49 +910,50 @@ class _PaymentHistoryCard extends StatelessWidget {
                         fontFamily: 'NotoNastaliqUrdu',
                         color: AppColors.textSecondary)))
           else
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: DataTable(
-                  columnSpacing: 24,
-                  headingRowHeight: 40,
-                  columns: [
-                    DataColumn(
-                        label: Text(
-                            Provider.of<LanguageProvider>(context)
-                                .translate('month_label'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text(
-                            Provider.of<LanguageProvider>(context)
-                                .translate('units_label'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text(
-                            Provider.of<LanguageProvider>(context)
-                                .translate('bill_label'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Text(
-                            Provider.of<LanguageProvider>(context)
-                                .translate('payment_label'),
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold))),
-                  ],
-                  rows: history
-                      .map((e) => DataRow(cells: [
-                            DataCell(Text(e.month)),
-                            DataCell(Text(e.units)),
-                            DataCell(Text(UrduFormatter.pkr(e.bill,
-                                locale: lp.currentLanguageCode))),
-                            DataCell(Text(UrduFormatter.pkr(e.payment,
-                                locale: lp.currentLanguageCode))),
-                          ]))
-                      .toList(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 600),
+                  child: Table(
+                    columnWidths: const {
+                      0: FlexColumnWidth(1.2),
+                      1: FlexColumnWidth(0.8),
+                      2: FlexColumnWidth(1.2),
+                      3: FlexColumnWidth(1.2),
+                    },
+                    children: [
+                      // Header Row
+                      TableRow(
+                        children: [
+                          _cellText(lp.translate('month_label'),
+                              isHeader: true),
+                          _cellText(lp.translate('units_label'),
+                              isHeader: true),
+                          _cellText(lp.translate('bill_label'), isHeader: true),
+                          _cellText(lp.translate('payment_label'),
+                              isHeader: true),
+                        ],
+                      ),
+                      // Data Rows
+                      ...history.map((e) => TableRow(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: AppColors.divider, width: 0.5)),
+                            ),
+                            children: [
+                              _cellText(e.month),
+                              _cellText(e.units),
+                              _cellText(NumberFormat('#,###', 'en_PK')
+                                  .format(e.bill)),
+                              _cellText(NumberFormat('#,###', 'en_PK')
+                                  .format(e.payment)),
+                            ],
+                          )),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1036,114 +961,23 @@ class _PaymentHistoryCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class _OverchargeAlertCard extends StatelessWidget {
-  final Bill bill;
-  const _OverchargeAlertCard({required this.bill});
-  @override
-  Widget build(BuildContext context) {
-    final lp = Provider.of<LanguageProvider>(context);
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-          gradient: AppColors.errorGradient,
-          borderRadius: BorderRadius.circular(24)),
-      child: Column(
-        crossAxisAlignment: lp.currentLanguageCode == 'ur'
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: lp.currentLanguageCode == 'ur'
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
-            children: [
-              if (lp.currentLanguageCode != 'ur')
-                const Icon(Icons.warning_rounded,
-                    color: Colors.white, size: 28),
-              if (lp.currentLanguageCode != 'ur') const SizedBox(width: 12),
-              Text(lp.translate('overchargeAlertTitle'),
-                  style: TextStyle(
-                      fontFamily: lp.currentLanguageCode == 'ur'
-                          ? 'NotoNastaliqUrdu'
-                          : 'Roboto',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white)),
-              if (lp.currentLanguageCode == 'ur') const SizedBox(width: 12),
-              if (lp.currentLanguageCode == 'ur')
-                const Icon(Icons.warning_rounded,
-                    color: Colors.white, size: 28),
-            ],
+  Widget _cellText(String text, {bool isHeader = false}) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 4),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: isHeader ? 12 : 13,
+            color: isHeader ? AppColors.textSecondary : AppColors.textPrimary,
+            fontWeight: isHeader ? FontWeight.bold : FontWeight.w600,
           ),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              _AmountBox(
-                  label: lp.translate('overchargeCharged'),
-                  amount: bill.totalAmount,
-                  color: Colors.white.withOpacity(0.2)),
-              const SizedBox(width: 8),
-              _AmountBox(
-                  label: lp.translate('overchargeExpected'),
-                  amount: bill.expectedAmount,
-                  color: Colors.white.withOpacity(0.1)),
-              const SizedBox(width: 8),
-              _AmountBox(
-                  label: lp.translate('overchargeDiff'),
-                  amount: bill.overchargeAmount,
-                  color: Colors.white.withOpacity(0.3)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _AmountBox extends StatelessWidget {
-  final String label;
-  final double amount;
-  final Color color;
-
-  const _AmountBox({
-    required this.label,
-    required this.amount,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final lp = Provider.of<LanguageProvider>(context);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(16)),
-        child: Column(
-          children: [
-            Text(UrduFormatter.pkr(amount, locale: lp.currentLanguageCode),
-                style: const TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white)),
-            const SizedBox(height: 4),
-            Text(label,
-                style: TextStyle(
-                    fontFamily: lp.currentLanguageCode == 'ur'
-                        ? 'NotoNastaliqUrdu'
-                        : 'Roboto',
-                    fontSize: 10,
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold)),
-          ],
         ),
-      ),
-    );
-  }
+      );
 }
+
 
 class _LoadingView extends StatelessWidget {
   @override

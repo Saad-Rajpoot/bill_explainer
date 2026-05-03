@@ -72,8 +72,9 @@ class OcrService {
   Future<String> _compressImage(String sourcePath) async {
     final bytes = await File(sourcePath).readAsBytes();
     final decoded = img.decodeImage(bytes);
-    if (decoded == null)
+    if (decoded == null) {
       throw const OcrException(message: 'تصویر پڑھنے میں خرابی');
+    }
 
     // Resize if larger than 1200px wide
     final resized =

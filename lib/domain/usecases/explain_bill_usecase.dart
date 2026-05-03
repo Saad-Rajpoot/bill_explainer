@@ -38,7 +38,7 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
     final helpline = WapdaTariffs.companyHelplines[bill.companyName] ?? '118';
 
     String? complaintText;
-    if (bill.isOvercharged) {
+    if (bill.isHighBill) {
       complaintText = AppStrings.complaintTemplate
           .replaceAll('{consumer_no}', bill.consumerNumber)
           .replaceAll(
@@ -51,8 +51,8 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
     return BillExplanation(
       bill: bill,
       charges: charges,
-      overallStatusUrdu: bill.isOvercharged
-          ? AppStrings.explainOvercharged
+      overallStatusUrdu: bill.isHighBill
+          ? 'آپ کا بل پچھلے مہینے سے زیادہ ہے'
           : AppStrings.explainAllGood,
       complaintText: complaintText,
       helplineNumber: helpline,
@@ -143,7 +143,7 @@ class ExplainBillUseCase implements UseCase<BillExplanation, ExplainBillParams> 
       } else if (ratio <= 1.20) {
         status = ChargeStatus.high;
       } else {
-        status = ChargeStatus.overcharged;
+        status = ChargeStatus.high;
       }
     }
 

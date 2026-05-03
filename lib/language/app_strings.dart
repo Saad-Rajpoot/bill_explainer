@@ -32,17 +32,16 @@ class AppStrings {
     'onboarding2Title': 'We Will Explain',
     'onboarding2Desc':
         'Learn the meaning of every charge in simple terms — FC, GST, ED and more',
-    'onboarding3Title': 'High Bill? File Complaint',
-    'onboarding3Desc':
-        'If the bill is incorrect, send an instant complaint via WhatsApp',
+    'onboarding3Title': 'High Bill',
+    'onboarding3Desc': 'If the bill is incorrect, send an instant complaint',
     'onboardingSkip': 'Skip',
     'onboardingNext': 'Next',
     'onboardingStart': 'Get Started',
     'homeGreeting': 'Hello',
     'homeScanButton': 'Scan Bill',
     'scanTip': 'Take a photo in a bright place for better results',
-    'statusNormal': 'All Good',
-    'statusOvercharged': 'Overcharged',
+    'statusNormal': 'Normal',
+    'statusHigh': 'High',
     'homeLastBill': 'Last Bill',
     'due_date_prefix': 'Due Date: ',
     'homeNoBill': 'No bill scanned yet',
@@ -141,7 +140,8 @@ class AppStrings {
     'label_gst_fpa': 'GST on FPA',
     'label_ed_fpa': 'ED on FPA',
     'label_total_tax_fpa': 'Total Taxes on FPA',
-    'explain_company_gst': 'The registration number of the electricity company for sales tax purposes.',
+    'explain_company_gst':
+        'The registration number of the electricity company for sales tax purposes.',
     // Box 8 Labels
     'label_arrears': 'Arrears/Age',
     'label_current_bill': 'Current Bill',
@@ -158,10 +158,6 @@ class AppStrings {
     'label_call': 'Call',
     'label_complaints': 'Complaints',
     'explainBreakdown': 'Bill Breakdown',
-    'overchargeAlertTitle': 'Overcharge Alert!',
-    'overchargeCharged': 'Charged',
-    'overchargeExpected': 'Expected',
-    'overchargeDiff': 'Difference',
     // Explanations
     'explain_cost_elec': 'The actual price of the units you used this month.',
     'explain_meter_rent':
@@ -249,16 +245,25 @@ class AppStrings {
         'Sum of all Fuel Price Adjustments applied to your bill.',
     'explain_payable_after':
         'The total amount you must pay if the due date has passed.',
-    'explain_cost_of_electricity': 'The base cost of the units of electricity you consumed.',
-    'explain_meter_rent_fix_charges': 'Fixed monthly charges for meter rental and service maintenance.',
-    'explain_fuel_price_adjustment': 'Adjustment based on changes in fuel prices used for power generation.',
-    'explain_fc_surcharge': 'Surcharge for financing power sector debts and projects.',
-    'explain_qtr_tariff_adj': 'Quarterly adjustment to balance power production costs.',
-    'explain_electricity_duty': 'A provincial tax applied to electricity consumption.',
+    'explain_cost_of_electricity':
+        'The base cost of the units of electricity you consumed.',
+    'explain_meter_rent_fix_charges':
+        'Fixed monthly charges for meter rental and service maintenance.',
+    'explain_fuel_price_adjustment':
+        'Adjustment based on changes in fuel prices used for power generation.',
+    'explain_fc_surcharge':
+        'Surcharge for financing power sector debts and projects.',
+    'explain_qtr_tariff_adj':
+        'Quarterly adjustment to balance power production costs.',
+    'explain_electricity_duty':
+        'A provincial tax applied to electricity consumption.',
     'explain_tv_fee': 'Monthly license fee for PTV (National Television).',
-    'explain_name': 'The consumer name registered with the electricity company.',
-    'explain_units_consumed': 'Total number of electricity units used during this billing period.',
-    'explain_calculation_formula': 'The mathematical calculation: Units Consumed x Government Approved Tariff.',
+    'explain_name':
+        'The consumer name registered with the electricity company.',
+    'explain_units_consumed':
+        'Total number of electricity units used during this billing period.',
+    'explain_calculation_formula':
+        'The mathematical calculation: Units Consumed x Government Approved Tariff.',
     // Box Overviews
     'explain_box_1_summary':
         'This section contains your connection details like the date you got electricity and when your meter was read.',
@@ -314,16 +319,16 @@ class AppStrings {
     'onboarding2Title': 'ہم سمجھائیں گے',
     'onboarding2Desc':
         'ہر چارج کا آسان اردو میں مطلب جانیں — FC، GST، ED سب کچھ',
-    'onboarding3Title': 'زیادہ بل؟ شکایت کریں',
-    'onboarding3Desc': 'اگر بل غلط ہے تو فوری شکایت بھیجیں — واٹس ایپ پر',
+    'onboarding3Title': 'زیادہ بل',
+    'onboarding3Desc': 'اگر بل غلط ہے تو فوری شکایت بھیجیں',
     'onboardingSkip': 'چھوڑیں',
     'onboardingNext': 'آگے',
     'onboardingStart': 'شروع کریں',
     'homeGreeting': 'السلام علیکم',
     'homeScanButton': 'بل اسکین کریں',
     'scanTip': 'بہتر نتیجے کے لیے روشن جگہ پر تصویر لیں',
-    'statusNormal': 'ٹھیک ہے',
-    'statusOvercharged': 'زیادہ وصول کیا',
+    'statusNormal': 'نارمل',
+    'statusHigh': 'زیادہ',
     'homeLastBill': 'آخری بل',
     'due_date_prefix': 'آخری تاریخ: ',
     'homeNoBill': 'ابھی تک کوئی بل اسکین نہیں کیا',
@@ -438,10 +443,6 @@ class AppStrings {
     'label_call': 'کال',
     'label_complaints': 'شکایات',
     'explainBreakdown': 'بل کی تفصیل',
-    'overchargeAlertTitle': 'زیادہ بل کا خدشہ!',
-    'overchargeCharged': 'وصول کی گئی رقم',
-    'overchargeExpected': 'متوقع رقم',
-    'overchargeDiff': 'فرق',
     // Explanations
     'explain_cost_elec': 'آپ کے استعمال کردہ یونٹس کی اصل قیمت۔',
     'explain_meter_rent': 'میٹر کا بنیادی ماہانہ کرایہ یا فکسڈ سروس چارجز۔',
@@ -491,7 +492,8 @@ class AppStrings {
     'explain_area': 'وہ مخصوص رہائشی یا تجارتی علاقہ جہاں کنکشن لگا ہوا ہے۔',
     'explain_reference':
         'کمپنی ڈیٹا بیس میں آپ کے بل کی شناخت کے لیے ۱۴ ہندسوں کا مخصوص نمبر۔',
-    'explain_company_gst': 'سیلز ٹیکس کے مقاصد کے لیے بجلی فراہم کرنے والی کمپنی کا رجسٹریشن نمبر۔',
+    'explain_company_gst':
+        'سیلز ٹیکس کے مقاصد کے لیے بجلی فراہم کرنے والی کمپنی کا رجسٹریشن نمبر۔',
     'explain_complaints':
         'بجلی کی بندش یا بلنگ کے مسائل کی اطلاع دینے کے لیے آفیشل ہیلپ لائن نمبر۔',
     'explain_sms':
@@ -517,16 +519,23 @@ class AppStrings {
     'explain_total_fpa':
         'بل پر لگنے والے تمام فیول پرائس ایڈجسٹمنٹس کا مجموعہ۔',
     'explain_payable_after': 'آخری تاریخ گزرنے کے بعد ادا کی جانے والی کل رقم۔',
-    'explain_cost_of_electricity': 'آپ کے استعمال کردہ بجلی کے یونٹس کی بنیادی قیمت۔',
-    'explain_meter_rent_fix_charges': 'میٹر کے کرایے اور سروس کے ماہانہ فکسڈ چارجز۔',
-    'explain_fuel_price_adjustment': 'بجلی پیدا کرنے والے ایندھن کی قیمتوں میں تبدیلی کی بنیاد پر ایڈجسٹمنٹ۔',
-    'explain_fc_surcharge': 'بجلی کے شعبے کے قرضوں اور منصوبوں کے لیے لگایا گیا سرچارج۔',
-    'explain_qtr_tariff_adj': 'بجلی کی پیداواری لاگت کو بیلنس کرنے کے لیے سہ ماہی ایڈجسٹمنٹ۔',
+    'explain_cost_of_electricity':
+        'آپ کے استعمال کردہ بجلی کے یونٹس کی بنیادی قیمت۔',
+    'explain_meter_rent_fix_charges':
+        'میٹر کے کرایے اور سروس کے ماہانہ فکسڈ چارجز۔',
+    'explain_fuel_price_adjustment':
+        'بجلی پیدا کرنے والے ایندھن کی قیمتوں میں تبدیلی کی بنیاد پر ایڈجسٹمنٹ۔',
+    'explain_fc_surcharge':
+        'بجلی کے شعبے کے قرضوں اور منصوبوں کے لیے لگایا گیا سرچارج۔',
+    'explain_qtr_tariff_adj':
+        'بجلی کی پیداواری لاگت کو بیلنس کرنے کے لیے سہ ماہی ایڈجسٹمنٹ۔',
     'explain_electricity_duty': 'بجلی کے استعمال پر لگنے والا صوبائی ٹیکس۔',
     'explain_tv_fee': 'پی ٹی وی (PTV) کے لیے ماہانہ لائسنس فیس۔',
     'explain_name': 'بجلی کمپنی کے ریکارڈ میں رجسٹرڈ صارف کا نام۔',
-    'explain_units_consumed': 'اس بلنگ پیریڈ کے دوران استعمال ہونے والے کل یونٹس۔',
-    'explain_calculation_formula': 'حساب کتاب کا طریقہ: استعمال شدہ یونٹ ضرب حکومتی ٹیرف۔',
+    'explain_units_consumed':
+        'اس بلنگ پیریڈ کے دوران استعمال ہونے والے کل یونٹس۔',
+    'explain_calculation_formula':
+        'حساب کتاب کا طریقہ: استعمال شدہ یونٹ ضرب حکومتی ٹیرف۔',
     // Box Overviews
     'explain_box_1_summary':
         'اس حصے میں آپ کے کنکشن کی تفصیلات جیسے کنکشن کی تاریخ اور ریڈنگ کی تاریخ درج ہوتی ہے۔',

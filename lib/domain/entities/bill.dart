@@ -30,8 +30,8 @@ class Bill extends Equatable {
   final List<BillCharge> charges;
   final List<PaymentHistoryEntry> paymentHistory;
   final double expectedAmount;
-  final bool isOvercharged;
-  final double overchargeAmount;
+  final bool isHighBill;
+  final double differenceAmount;
 
   // ── BOX 1: Connection Info ─────────────────────────────────────────
   final String companyName;
@@ -128,8 +128,8 @@ class Bill extends Equatable {
     required this.charges,
     required this.paymentHistory,
     required this.expectedAmount,
-    required this.isOvercharged,
-    required this.overchargeAmount,
+    required this.isHighBill,
+    required this.differenceAmount,
     // Box 1
     required this.companyName,
     this.connectionDate,

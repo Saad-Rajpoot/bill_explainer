@@ -92,175 +92,175 @@ const BillModelSchema = CollectionSchema(
       name: r'currentBill',
       type: IsarType.double,
     ),
-    r'division': PropertySchema(
+    r'differenceAmount': PropertySchema(
       id: 15,
+      name: r'differenceAmount',
+      type: IsarType.double,
+    ),
+    r'division': PropertySchema(
+      id: 16,
       name: r'division',
       type: IsarType.string,
     ),
     r'dueDate': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'dueDate',
       type: IsarType.dateTime,
     ),
     r'edOnFpa': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'edOnFpa',
       type: IsarType.double,
     ),
     r'edo': PropertySchema(
-      id: 18,
+      id: 19,
       name: r'edo',
       type: IsarType.string,
     ),
     r'electricityDuty': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'electricityDuty',
       type: IsarType.double,
     ),
     r'etOnFpa': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'etOnFpa',
       type: IsarType.double,
     ),
     r'expectedAmount': PropertySchema(
-      id: 21,
+      id: 22,
       name: r'expectedAmount',
       type: IsarType.double,
     ),
     r'extraTax': PropertySchema(
-      id: 22,
+      id: 23,
       name: r'extraTax',
       type: IsarType.double,
     ),
     r'fcSurcharge': PropertySchema(
-      id: 23,
+      id: 24,
       name: r'fcSurcharge',
       type: IsarType.double,
     ),
     r'feederName': PropertySchema(
-      id: 24,
+      id: 25,
       name: r'feederName',
       type: IsarType.string,
     ),
     r'fuelPriceAdjustment': PropertySchema(
-      id: 25,
+      id: 26,
       name: r'fuelPriceAdjustment',
       type: IsarType.double,
     ),
     r'furtherTax': PropertySchema(
-      id: 26,
+      id: 27,
       name: r'furtherTax',
       type: IsarType.double,
     ),
     r'furtherTaxOnFpa': PropertySchema(
-      id: 27,
+      id: 28,
       name: r'furtherTaxOnFpa',
       type: IsarType.double,
     ),
     r'gopTariff': PropertySchema(
-      id: 28,
+      id: 29,
       name: r'gopTariff',
       type: IsarType.double,
     ),
     r'gst': PropertySchema(
-      id: 29,
+      id: 30,
       name: r'gst',
       type: IsarType.double,
     ),
     r'gstOnFpa': PropertySchema(
-      id: 30,
+      id: 31,
       name: r'gstOnFpa',
       type: IsarType.double,
     ),
     r'imagePath': PropertySchema(
-      id: 31,
+      id: 32,
       name: r'imagePath',
       type: IsarType.string,
     ),
     r'incomeTax': PropertySchema(
-      id: 32,
+      id: 33,
       name: r'incomeTax',
       type: IsarType.double,
     ),
     r'installment': PropertySchema(
-      id: 33,
+      id: 34,
       name: r'installment',
       type: IsarType.double,
     ),
-    r'isOvercharged': PropertySchema(
-      id: 34,
-      name: r'isOvercharged',
+    r'isHighBill': PropertySchema(
+      id: 35,
+      name: r'isHighBill',
       type: IsarType.bool,
     ),
     r'issueDate': PropertySchema(
-      id: 35,
+      id: 36,
       name: r'issueDate',
       type: IsarType.string,
     ),
     r'itOnFpa': PropertySchema(
-      id: 36,
+      id: 37,
       name: r'itOnFpa',
       type: IsarType.double,
     ),
     r'load': PropertySchema(
-      id: 37,
+      id: 38,
       name: r'load',
       type: IsarType.double,
     ),
     r'lockAge': PropertySchema(
-      id: 38,
+      id: 39,
       name: r'lockAge',
       type: IsarType.string,
     ),
     r'lpSurcharge': PropertySchema(
-      id: 39,
+      id: 40,
       name: r'lpSurcharge',
       type: IsarType.double,
     ),
     r'meterNo': PropertySchema(
-      id: 40,
+      id: 41,
       name: r'meterNo',
       type: IsarType.string,
     ),
     r'meterRentFixCharges': PropertySchema(
-      id: 41,
+      id: 42,
       name: r'meterRentFixCharges',
       type: IsarType.double,
     ),
     r'mf': PropertySchema(
-      id: 42,
+      id: 43,
       name: r'mf',
       type: IsarType.long,
     ),
     r'name': PropertySchema(
-      id: 43,
+      id: 44,
       name: r'name',
       type: IsarType.string,
     ),
     r'noOfAct': PropertySchema(
-      id: 44,
+      id: 45,
       name: r'noOfAct',
       type: IsarType.string,
     ),
     r'ocrConfidence': PropertySchema(
-      id: 45,
+      id: 46,
       name: r'ocrConfidence',
       type: IsarType.double,
     ),
     r'oldAccountNumber': PropertySchema(
-      id: 46,
+      id: 47,
       name: r'oldAccountNumber',
       type: IsarType.string,
     ),
     r'orCall': PropertySchema(
-      id: 47,
+      id: 48,
       name: r'orCall',
       type: IsarType.string,
-    ),
-    r'overchargeAmount': PropertySchema(
-      id: 48,
-      name: r'overchargeAmount',
-      type: IsarType.double,
     ),
     r'payableAfterDueDate': PropertySchema(
       id: 49,
@@ -686,40 +686,40 @@ void _billModelSerialize(
   writer.writeString(offsets[12], object.consumerNumber);
   writer.writeDouble(offsets[13], object.costOfElectricity);
   writer.writeDouble(offsets[14], object.currentBill);
-  writer.writeString(offsets[15], object.division);
-  writer.writeDateTime(offsets[16], object.dueDate);
-  writer.writeDouble(offsets[17], object.edOnFpa);
-  writer.writeString(offsets[18], object.edo);
-  writer.writeDouble(offsets[19], object.electricityDuty);
-  writer.writeDouble(offsets[20], object.etOnFpa);
-  writer.writeDouble(offsets[21], object.expectedAmount);
-  writer.writeDouble(offsets[22], object.extraTax);
-  writer.writeDouble(offsets[23], object.fcSurcharge);
-  writer.writeString(offsets[24], object.feederName);
-  writer.writeDouble(offsets[25], object.fuelPriceAdjustment);
-  writer.writeDouble(offsets[26], object.furtherTax);
-  writer.writeDouble(offsets[27], object.furtherTaxOnFpa);
-  writer.writeDouble(offsets[28], object.gopTariff);
-  writer.writeDouble(offsets[29], object.gst);
-  writer.writeDouble(offsets[30], object.gstOnFpa);
-  writer.writeString(offsets[31], object.imagePath);
-  writer.writeDouble(offsets[32], object.incomeTax);
-  writer.writeDouble(offsets[33], object.installment);
-  writer.writeBool(offsets[34], object.isOvercharged);
-  writer.writeString(offsets[35], object.issueDate);
-  writer.writeDouble(offsets[36], object.itOnFpa);
-  writer.writeDouble(offsets[37], object.load);
-  writer.writeString(offsets[38], object.lockAge);
-  writer.writeDouble(offsets[39], object.lpSurcharge);
-  writer.writeString(offsets[40], object.meterNo);
-  writer.writeDouble(offsets[41], object.meterRentFixCharges);
-  writer.writeLong(offsets[42], object.mf);
-  writer.writeString(offsets[43], object.name);
-  writer.writeString(offsets[44], object.noOfAct);
-  writer.writeDouble(offsets[45], object.ocrConfidence);
-  writer.writeString(offsets[46], object.oldAccountNumber);
-  writer.writeString(offsets[47], object.orCall);
-  writer.writeDouble(offsets[48], object.overchargeAmount);
+  writer.writeDouble(offsets[15], object.differenceAmount);
+  writer.writeString(offsets[16], object.division);
+  writer.writeDateTime(offsets[17], object.dueDate);
+  writer.writeDouble(offsets[18], object.edOnFpa);
+  writer.writeString(offsets[19], object.edo);
+  writer.writeDouble(offsets[20], object.electricityDuty);
+  writer.writeDouble(offsets[21], object.etOnFpa);
+  writer.writeDouble(offsets[22], object.expectedAmount);
+  writer.writeDouble(offsets[23], object.extraTax);
+  writer.writeDouble(offsets[24], object.fcSurcharge);
+  writer.writeString(offsets[25], object.feederName);
+  writer.writeDouble(offsets[26], object.fuelPriceAdjustment);
+  writer.writeDouble(offsets[27], object.furtherTax);
+  writer.writeDouble(offsets[28], object.furtherTaxOnFpa);
+  writer.writeDouble(offsets[29], object.gopTariff);
+  writer.writeDouble(offsets[30], object.gst);
+  writer.writeDouble(offsets[31], object.gstOnFpa);
+  writer.writeString(offsets[32], object.imagePath);
+  writer.writeDouble(offsets[33], object.incomeTax);
+  writer.writeDouble(offsets[34], object.installment);
+  writer.writeBool(offsets[35], object.isHighBill);
+  writer.writeString(offsets[36], object.issueDate);
+  writer.writeDouble(offsets[37], object.itOnFpa);
+  writer.writeDouble(offsets[38], object.load);
+  writer.writeString(offsets[39], object.lockAge);
+  writer.writeDouble(offsets[40], object.lpSurcharge);
+  writer.writeString(offsets[41], object.meterNo);
+  writer.writeDouble(offsets[42], object.meterRentFixCharges);
+  writer.writeLong(offsets[43], object.mf);
+  writer.writeString(offsets[44], object.name);
+  writer.writeString(offsets[45], object.noOfAct);
+  writer.writeDouble(offsets[46], object.ocrConfidence);
+  writer.writeString(offsets[47], object.oldAccountNumber);
+  writer.writeString(offsets[48], object.orCall);
   writer.writeString(offsets[49], object.payableAfterDueDate);
   writer.writeObjectList<PaymentHistoryModel>(
     offsets[50],
@@ -776,41 +776,41 @@ BillModel _billModelDeserialize(
   object.consumerNumber = reader.readString(offsets[12]);
   object.costOfElectricity = reader.readDoubleOrNull(offsets[13]);
   object.currentBill = reader.readDoubleOrNull(offsets[14]);
-  object.division = reader.readStringOrNull(offsets[15]);
-  object.dueDate = reader.readDateTime(offsets[16]);
-  object.edOnFpa = reader.readDoubleOrNull(offsets[17]);
-  object.edo = reader.readStringOrNull(offsets[18]);
-  object.electricityDuty = reader.readDoubleOrNull(offsets[19]);
-  object.etOnFpa = reader.readDoubleOrNull(offsets[20]);
-  object.expectedAmount = reader.readDouble(offsets[21]);
-  object.extraTax = reader.readDoubleOrNull(offsets[22]);
-  object.fcSurcharge = reader.readDoubleOrNull(offsets[23]);
-  object.feederName = reader.readStringOrNull(offsets[24]);
-  object.fuelPriceAdjustment = reader.readDoubleOrNull(offsets[25]);
-  object.furtherTax = reader.readDoubleOrNull(offsets[26]);
-  object.furtherTaxOnFpa = reader.readDoubleOrNull(offsets[27]);
-  object.gopTariff = reader.readDoubleOrNull(offsets[28]);
-  object.gst = reader.readDoubleOrNull(offsets[29]);
-  object.gstOnFpa = reader.readDoubleOrNull(offsets[30]);
+  object.differenceAmount = reader.readDouble(offsets[15]);
+  object.division = reader.readStringOrNull(offsets[16]);
+  object.dueDate = reader.readDateTime(offsets[17]);
+  object.edOnFpa = reader.readDoubleOrNull(offsets[18]);
+  object.edo = reader.readStringOrNull(offsets[19]);
+  object.electricityDuty = reader.readDoubleOrNull(offsets[20]);
+  object.etOnFpa = reader.readDoubleOrNull(offsets[21]);
+  object.expectedAmount = reader.readDouble(offsets[22]);
+  object.extraTax = reader.readDoubleOrNull(offsets[23]);
+  object.fcSurcharge = reader.readDoubleOrNull(offsets[24]);
+  object.feederName = reader.readStringOrNull(offsets[25]);
+  object.fuelPriceAdjustment = reader.readDoubleOrNull(offsets[26]);
+  object.furtherTax = reader.readDoubleOrNull(offsets[27]);
+  object.furtherTaxOnFpa = reader.readDoubleOrNull(offsets[28]);
+  object.gopTariff = reader.readDoubleOrNull(offsets[29]);
+  object.gst = reader.readDoubleOrNull(offsets[30]);
+  object.gstOnFpa = reader.readDoubleOrNull(offsets[31]);
   object.id = id;
-  object.imagePath = reader.readStringOrNull(offsets[31]);
-  object.incomeTax = reader.readDoubleOrNull(offsets[32]);
-  object.installment = reader.readDoubleOrNull(offsets[33]);
-  object.isOvercharged = reader.readBool(offsets[34]);
-  object.issueDate = reader.readStringOrNull(offsets[35]);
-  object.itOnFpa = reader.readDoubleOrNull(offsets[36]);
-  object.load = reader.readDoubleOrNull(offsets[37]);
-  object.lockAge = reader.readStringOrNull(offsets[38]);
-  object.lpSurcharge = reader.readDoubleOrNull(offsets[39]);
-  object.meterNo = reader.readStringOrNull(offsets[40]);
-  object.meterRentFixCharges = reader.readDoubleOrNull(offsets[41]);
-  object.mf = reader.readLongOrNull(offsets[42]);
-  object.name = reader.readStringOrNull(offsets[43]);
-  object.noOfAct = reader.readStringOrNull(offsets[44]);
-  object.ocrConfidence = reader.readDouble(offsets[45]);
-  object.oldAccountNumber = reader.readStringOrNull(offsets[46]);
-  object.orCall = reader.readStringOrNull(offsets[47]);
-  object.overchargeAmount = reader.readDouble(offsets[48]);
+  object.imagePath = reader.readStringOrNull(offsets[32]);
+  object.incomeTax = reader.readDoubleOrNull(offsets[33]);
+  object.installment = reader.readDoubleOrNull(offsets[34]);
+  object.isHighBill = reader.readBool(offsets[35]);
+  object.issueDate = reader.readStringOrNull(offsets[36]);
+  object.itOnFpa = reader.readDoubleOrNull(offsets[37]);
+  object.load = reader.readDoubleOrNull(offsets[38]);
+  object.lockAge = reader.readStringOrNull(offsets[39]);
+  object.lpSurcharge = reader.readDoubleOrNull(offsets[40]);
+  object.meterNo = reader.readStringOrNull(offsets[41]);
+  object.meterRentFixCharges = reader.readDoubleOrNull(offsets[42]);
+  object.mf = reader.readLongOrNull(offsets[43]);
+  object.name = reader.readStringOrNull(offsets[44]);
+  object.noOfAct = reader.readStringOrNull(offsets[45]);
+  object.ocrConfidence = reader.readDouble(offsets[46]);
+  object.oldAccountNumber = reader.readStringOrNull(offsets[47]);
+  object.orCall = reader.readStringOrNull(offsets[48]);
   object.payableAfterDueDate = reader.readStringOrNull(offsets[49]);
   object.paymentHistory = reader.readObjectList<PaymentHistoryModel>(
         offsets[50],
@@ -885,27 +885,27 @@ P _billModelDeserializeProp<P>(
     case 14:
       return (reader.readDoubleOrNull(offset)) as P;
     case 15:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 16:
-      return (reader.readDateTime(offset)) as P;
-    case 17:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 18:
       return (reader.readStringOrNull(offset)) as P;
-    case 19:
+    case 17:
+      return (reader.readDateTime(offset)) as P;
+    case 18:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 19:
+      return (reader.readStringOrNull(offset)) as P;
     case 20:
       return (reader.readDoubleOrNull(offset)) as P;
     case 21:
-      return (reader.readDouble(offset)) as P;
-    case 22:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 22:
+      return (reader.readDouble(offset)) as P;
     case 23:
       return (reader.readDoubleOrNull(offset)) as P;
     case 24:
-      return (reader.readStringOrNull(offset)) as P;
-    case 25:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 25:
+      return (reader.readStringOrNull(offset)) as P;
     case 26:
       return (reader.readDoubleOrNull(offset)) as P;
     case 27:
@@ -917,41 +917,41 @@ P _billModelDeserializeProp<P>(
     case 30:
       return (reader.readDoubleOrNull(offset)) as P;
     case 31:
-      return (reader.readStringOrNull(offset)) as P;
-    case 32:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 32:
+      return (reader.readStringOrNull(offset)) as P;
     case 33:
       return (reader.readDoubleOrNull(offset)) as P;
     case 34:
-      return (reader.readBool(offset)) as P;
-    case 35:
-      return (reader.readStringOrNull(offset)) as P;
-    case 36:
       return (reader.readDoubleOrNull(offset)) as P;
+    case 35:
+      return (reader.readBool(offset)) as P;
+    case 36:
+      return (reader.readStringOrNull(offset)) as P;
     case 37:
       return (reader.readDoubleOrNull(offset)) as P;
     case 38:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 39:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 40:
-      return (reader.readStringOrNull(offset)) as P;
-    case 41:
       return (reader.readDoubleOrNull(offset)) as P;
-    case 42:
-      return (reader.readLongOrNull(offset)) as P;
-    case 43:
+    case 41:
       return (reader.readStringOrNull(offset)) as P;
+    case 42:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 43:
+      return (reader.readLongOrNull(offset)) as P;
     case 44:
       return (reader.readStringOrNull(offset)) as P;
     case 45:
-      return (reader.readDouble(offset)) as P;
-    case 46:
       return (reader.readStringOrNull(offset)) as P;
+    case 46:
+      return (reader.readDouble(offset)) as P;
     case 47:
       return (reader.readStringOrNull(offset)) as P;
     case 48:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 49:
       return (reader.readStringOrNull(offset)) as P;
     case 50:
@@ -3157,6 +3157,72 @@ extension BillModelQueryFilter
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      differenceAmountEqualTo(
+    double value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'differenceAmount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      differenceAmountGreaterThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'differenceAmount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      differenceAmountLessThan(
+    double value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'differenceAmount',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
+      differenceAmountBetween(
+    double lower,
+    double upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'differenceAmount',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QAfterFilterCondition> divisionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4969,11 +5035,11 @@ extension BillModelQueryFilter
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      isOverchargedEqualTo(bool value) {
+  QueryBuilder<BillModel, BillModel, QAfterFilterCondition> isHighBillEqualTo(
+      bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isOvercharged',
+        property: r'isHighBill',
         value: value,
       ));
     });
@@ -6467,72 +6533,6 @@ extension BillModelQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'orCall',
         value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      overchargeAmountEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'overchargeAmount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      overchargeAmountGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'overchargeAmount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      overchargeAmountLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'overchargeAmount',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterFilterCondition>
-      overchargeAmountBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'overchargeAmount',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
       ));
     });
   }
@@ -9731,6 +9731,19 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByDifferenceAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'differenceAmount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy>
+      sortByDifferenceAmountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'differenceAmount', Sort.desc);
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByDivision() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'division', Sort.asc);
@@ -9960,15 +9973,15 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIsOvercharged() {
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIsHighBill() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isOvercharged', Sort.asc);
+      return query.addSortBy(r'isHighBill', Sort.asc);
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIsOverchargedDesc() {
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByIsHighBillDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isOvercharged', Sort.desc);
+      return query.addSortBy(r'isHighBill', Sort.desc);
     });
   }
 
@@ -10127,19 +10140,6 @@ extension BillModelQuerySortBy on QueryBuilder<BillModel, BillModel, QSortBy> {
   QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByOrCallDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'orCall', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> sortByOverchargeAmount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'overchargeAmount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy>
-      sortByOverchargeAmountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'overchargeAmount', Sort.desc);
     });
   }
 
@@ -10640,6 +10640,19 @@ extension BillModelQuerySortThenBy
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByDifferenceAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'differenceAmount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<BillModel, BillModel, QAfterSortBy>
+      thenByDifferenceAmountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'differenceAmount', Sort.desc);
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByDivision() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'division', Sort.asc);
@@ -10881,15 +10894,15 @@ extension BillModelQuerySortThenBy
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIsOvercharged() {
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIsHighBill() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isOvercharged', Sort.asc);
+      return query.addSortBy(r'isHighBill', Sort.asc);
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIsOverchargedDesc() {
+  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByIsHighBillDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isOvercharged', Sort.desc);
+      return query.addSortBy(r'isHighBill', Sort.desc);
     });
   }
 
@@ -11048,19 +11061,6 @@ extension BillModelQuerySortThenBy
   QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByOrCallDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'orCall', Sort.desc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy> thenByOverchargeAmount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'overchargeAmount', Sort.asc);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QAfterSortBy>
-      thenByOverchargeAmountDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'overchargeAmount', Sort.desc);
     });
   }
 
@@ -11484,6 +11484,12 @@ extension BillModelQueryWhereDistinct
     });
   }
 
+  QueryBuilder<BillModel, BillModel, QDistinct> distinctByDifferenceAmount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'differenceAmount');
+    });
+  }
+
   QueryBuilder<BillModel, BillModel, QDistinct> distinctByDivision(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -11603,9 +11609,9 @@ extension BillModelQueryWhereDistinct
     });
   }
 
-  QueryBuilder<BillModel, BillModel, QDistinct> distinctByIsOvercharged() {
+  QueryBuilder<BillModel, BillModel, QDistinct> distinctByIsHighBill() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isOvercharged');
+      return query.addDistinctBy(r'isHighBill');
     });
   }
 
@@ -11693,12 +11699,6 @@ extension BillModelQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'orCall', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<BillModel, BillModel, QDistinct> distinctByOverchargeAmount() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'overchargeAmount');
     });
   }
 
@@ -11974,6 +11974,12 @@ extension BillModelQueryProperty
     });
   }
 
+  QueryBuilder<BillModel, double, QQueryOperations> differenceAmountProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'differenceAmount');
+    });
+  }
+
   QueryBuilder<BillModel, String?, QQueryOperations> divisionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'division');
@@ -12089,9 +12095,9 @@ extension BillModelQueryProperty
     });
   }
 
-  QueryBuilder<BillModel, bool, QQueryOperations> isOverchargedProperty() {
+  QueryBuilder<BillModel, bool, QQueryOperations> isHighBillProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isOvercharged');
+      return query.addPropertyName(r'isHighBill');
     });
   }
 
@@ -12172,12 +12178,6 @@ extension BillModelQueryProperty
   QueryBuilder<BillModel, String?, QQueryOperations> orCallProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'orCall');
-    });
-  }
-
-  QueryBuilder<BillModel, double, QQueryOperations> overchargeAmountProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'overchargeAmount');
     });
   }
 

@@ -85,7 +85,7 @@ class TariffCalculator {
     final double electricityDuty = subtotal * WapdaTariffs.electricityDutyRate;
 
     // 9. TV Fee (flat per month)
-    final double tvFee = WapdaTariffs.tvFee;
+    const double tvFee = WapdaTariffs.tvFee;
 
     // 10. Total before GST
     final double totalBeforeTax = subtotal + electricityDuty + tvFee;
@@ -124,13 +124,14 @@ class TariffCalculator {
     );
   }
 
-  /// Validates whether a billed amount is reasonable for given units.
+  /// Validates whether a billed amount is higher than previous month.
   ///
   /// Returns [OverchargeResult] with details.
   static OverchargeResult validateBill({
     required int units,
     required double billedAmount,
     required String companyName,
+    double? previousMonthBill,
     double fcAdjustmentPerUnit = 0.0,
     double qtaPerUnit = 0.0,
     bool isFiler = true,
@@ -144,23 +145,19 @@ class TariffCalculator {
     );
 
     final double expected = result.grandTotal;
-    final double diff = billedAmount - expected;
-    // Allow ±5% tolerance for rounding / adjustments
-    final double toleranceAmount = expected * 0.05;
-
+    
+    // New Logic: Always Normal unless current > previous month
     final ChargeStatus status;
-    if (diff <= toleranceAmount) {
-      status = ChargeStatus.normal;
-    } else if (diff <= expected * 0.15) {
+    if (previousMonthBill != null && billedAmount > previousMonthBill) {
       status = ChargeStatus.high;
     } else {
-      status = ChargeStatus.overcharged;
+      status = ChargeStatus.normal;
     }
 
     return OverchargeResult(
       expectedAmount: expected,
       billedAmount: billedAmount,
-      difference: diff,
+      difference: billedAmount - expected,
       status: status,
       tariffResult: result,
     );
@@ -215,9 +212,8 @@ class TariffCalculator {
 // ─── Supporting Types ─────────────────────────────────────────────
 
 enum ChargeStatus {
-  normal,       // ٹھیک ہے
-  high,         // قدرے زیادہ
-  overcharged,  // زیادہ وصول کیا
+  normal, // ٹھیک ہے
+  high, // قدرے زیادہ
 }
 
 class OverchargeResult {
@@ -235,7 +231,6 @@ class OverchargeResult {
     required this.tariffResult,
   });
 
-  bool get isOvercharged => status == ChargeStatus.overcharged;
   bool get isHigh => status == ChargeStatus.high;
   bool get isNormal => status == ChargeStatus.normal;
 }

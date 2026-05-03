@@ -50,7 +50,7 @@ class _HomeView extends StatelessWidget {
                         style: TextStyle(fontFamily: languageProvider.currentLanguageCode == 'ur' ? 'NotoNastaliqUrdu' : 'Roboto',
                             fontSize: 16, color: Colors.white70)),
                     Text(languageProvider.translate('app_title'),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 28, fontWeight: FontWeight.w700,
                             color: Colors.white)),
                   ],
@@ -164,7 +164,8 @@ class _LastBillCard extends StatelessWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-              color: bill.isOvercharged ? AppColors.error.withOpacity(0.3)
+              color: bill.isHighBill
+                  ? AppColors.secondary.withOpacity(0.3)
                   : AppColors.divider.withOpacity(0.5)),
           boxShadow: AppColors.cardShadow,
         ),
@@ -177,17 +178,26 @@ class _LastBillCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: bill.isOvercharged
-                        ? AppColors.errorBackground : AppColors.successBackground,
+                    color: bill.isHighBill
+                        ? AppColors.secondary.withOpacity(0.1)
+                        : AppColors.successBackground,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    lp.translate(bill.isOvercharged ? 'statusOvercharged' : 'statusNormal'),
+                    lp.translate(bill.isHighBill ? 'statusHigh' : 'statusNormal'),
                     style: isUrdu
-                        ? const TextStyle(fontFamily: 'NotoNastaliqUrdu', fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.error)
+                        ? TextStyle(
+                            fontFamily: 'NotoNastaliqUrdu',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: bill.isHighBill
+                                ? AppColors.secondary
+                                : AppColors.success)
                         : GoogleFonts.outfit(
                             fontSize: 12,
-                            color: bill.isOvercharged ? AppColors.error : AppColors.success,
+                            color: bill.isHighBill
+                                ? AppColors.secondary
+                                : AppColors.success,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 0.5),
                   ),
@@ -213,7 +223,7 @@ class _LastBillCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.flash_on_rounded, size: 16, color: AppColors.primary),
+                const Icon(Icons.flash_on_rounded, size: 16, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Text(lp.translate('settingsCompany'),
                     style: isUrdu
